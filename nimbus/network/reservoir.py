@@ -100,19 +100,19 @@ class Reservoir(Node):
         storage_indicator = storage / time_step + discharge / 2.0
         return storage_indicator
 
-    def report_inputs(self, title_length=50, col_length=15, title_offset=4):
+    def report_inputs(self, col_length=15):
         title = ' Reservoir '
         col1_title = 'Stage (ft)'
         col2_title = 'Area (ac)'
         report = Report()
-        report.add_title(title, title_length, title_offset)
+        report.add_title(title)
         report.add_string_line('Name: ' + str(self.name))
         report.add_string_line('Starting Stage: ' + str(self.start_stage))
         report.add_blank_line()
-        report.add_two_columns(col1_title, col2_title, col_length)
-        report.add_two_columns('-' * col_length, '-' * col_length, col_length)
+        report.add_two_columns(col1_title, col2_title)
+        report.add_two_columns('-' * col_length, '-' * col_length)
         for contour in self.contours:
-            report.add_two_columns(str(round(contour[0], 4)), str(round(contour[1], 4)), col_length)
+            report.add_two_columns(str(round(contour[0], 4)), str(round(contour[1], 4)))
         report.output()
 
     '''

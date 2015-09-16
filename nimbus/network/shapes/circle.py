@@ -1,14 +1,16 @@
 __author__ = 'MillerB'
 
 from math import acos, sin
+from nimbus.network.shapes import Shape
 
 
-class Circle:
+class Circle(Shape):
 
     def __init__(self, diameter):
         self.diameter = diameter  # inches
         self.span = diameter  # inches
         self.rise = diameter  # inches
+        super(Circle, self).__init__(geometry='Circle')
 
     def get_alpha(self, depth):
         """Return the alpha value utilized for circular hydraulics."""

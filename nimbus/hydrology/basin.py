@@ -88,10 +88,10 @@ class Basin:
         potential_retention = 1000.0 / self.cn - 10.0
         return potential_retention
 
-    def report_inputs(self, title_length=50, col_length=15, title_offset=4):
+    def report_inputs(self, col_length=15):
         title = ' Basin '
         report = Report()
-        report.add_title(title, title_length, title_offset)
+        report.add_title(title)
         report.add_string_line('Name: ' + str(self.name))
         report.add_string_line('Area (ac): ' + str(self.area))
         report.add_string_line('Curve Number: ' + str(self.cn))

@@ -1,7 +1,5 @@
 __author__ = 'MillerB'
 
-from nimbus.hydrology import Basin
-
 
 class Node:
 

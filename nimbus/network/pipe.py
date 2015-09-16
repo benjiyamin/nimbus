@@ -3,6 +3,7 @@ __author__ = 'MillerB'
 from math import pow, sqrt
 from .link import Link
 from .weir import Weir
+from nimbus.reports import Report
 
 
 class Pipe(Link):
@@ -100,6 +101,14 @@ class Pipe(Link):
             #velocity = sqrt(a / (1 + b))
             velocity = sqrt(a / b)
         return velocity
+
+    def report_inputs(self, col_length=15):
+        title = ' Pipe '
+        report = Report()
+        report.add_title(title)
+        report.add_string_line('Name: ' + str(self.name))
+        report.add_string_line('Shape Type: ' + str(self.shape.geometry))
+        report.output()
 
     '''
     def get_average_depth(self, stage1, stage2):

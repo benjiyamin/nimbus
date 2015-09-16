@@ -7,7 +7,7 @@ class Report:
         self.lines = []
         self.add_blank_line()
 
-    def add_title(self, title, length, offset):
+    def add_title(self, title, length=50, offset=4):
         a = '=' * length
         b = '=' * offset + title + '=' * (length - len(title) - offset)
         self.add_string_line(a)
@@ -24,7 +24,7 @@ class Report:
         self.lines.append(string)
         return
 
-    def add_two_columns(self, entry1, entry2, col_length):
+    def add_two_columns(self, entry1, entry2, col_length=15):
         string = (('%' + str(col_length) + 's') % entry1) + ' ' + (('%' + str(col_length) + 's') % entry2)
         self.lines.append(string)
         return
