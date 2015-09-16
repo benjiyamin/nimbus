@@ -1,0 +1,8 @@
+__author__ = 'MillerB'
+
+
+class RainfallDistribution:
+
+    def __init__(self, name=None, couples=None):
+        self.name = name
+        self.couples = couples
