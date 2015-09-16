@@ -108,6 +108,10 @@ class Pipe(Link):
         report.add_title(title)
         report.add_string_line('Name: ' + str(self.name))
         report.add_string_line('Shape Type: ' + str(self.shape.geometry))
+        report.add_string_line('Mannings: ' + str(self.mannings))
+        report.add_string_line('Length: ' + str(self.length))
+        report.add_string_line('Invert 1: ' + str(self.invert1))
+        report.add_string_line('Invert 2: ' + str(self.invert2))
         report.output()
 
     '''
