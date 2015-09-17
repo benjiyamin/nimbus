@@ -1,4 +1,3 @@
-__author__ = 'millerb'
 
 import pickle
 import os
@@ -32,10 +31,10 @@ class Nimbus:
 
     def load_project(self, filepath):
         """Unpickle project object from a save file"""
-        open_file = open(filepath, "rb")
         try:
+            open_file = open(filepath, "rb")
             new_project = pickle.load(open_file)
-            open_file.close()
-            return new_project
         except:
             raise ValueError("Not a valid file!")
+        open_file.close()
+        return new_project

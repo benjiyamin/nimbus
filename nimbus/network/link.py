@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 
 class Link:

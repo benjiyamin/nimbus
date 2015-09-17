@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 from .link import Link
 from math import pow, sqrt

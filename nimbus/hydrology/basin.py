@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 from math import pow
 from nimbus.reports import Report

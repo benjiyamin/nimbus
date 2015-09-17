@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 from .node import Node
 from nimbus.math import interpolate_from_table, goal_seek

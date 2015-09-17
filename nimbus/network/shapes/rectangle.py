@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 from nimbus.network.shapes import Shape
 

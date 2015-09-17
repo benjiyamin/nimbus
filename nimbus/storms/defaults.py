@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 import os
 import csv

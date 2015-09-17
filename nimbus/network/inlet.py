@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 from .weir import Weir
 from .link import Link

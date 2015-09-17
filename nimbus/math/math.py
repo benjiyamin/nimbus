@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 
 def interpolate(g1, g2, g, d1, d2):

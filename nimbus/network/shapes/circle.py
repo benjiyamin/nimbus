@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 from math import acos, sin
 from nimbus.network.shapes import Shape

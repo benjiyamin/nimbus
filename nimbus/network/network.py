@@ -1,9 +1,9 @@
-__author__ = 'MillerB'
 
 import copy
 from .reservoir import Reservoir
 from .pipe import Pipe
 from .weir import Weir
+
 
 class Network:
 

@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 from nimbus.network import Network
 from nimbus.simulation import Simulation

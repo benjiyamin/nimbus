@@ -1,4 +1,3 @@
-__author__ = 'MillerB'
 
 from nimbus.math import interpolate_from_table
 from math import ceil
