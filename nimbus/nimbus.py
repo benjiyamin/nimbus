@@ -33,8 +33,9 @@ class Nimbus:
         """Unpickle project object from a save file"""
         try:
             open_file = open(filepath, "rb")
-            new_project = pickle.load(open_file)
+            project = pickle.load(open_file)
+            self.project = project
         except:
             raise ValueError("Not a valid file!")
         open_file.close()
-        return new_project
+        return project

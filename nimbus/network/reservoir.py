@@ -7,14 +7,14 @@ from nimbus.reports import Report
 
 class Reservoir(Node):
 
-    def __init__(self, start_stage=None, contours=None, name=None):
+    def __init__(self, start_stage=None, contours=None, name=None, basins=None):
         self.start_stage = start_stage
         self.name = name
         if contours is None:
             self.contours = []
         else:
             self.contours = contours
-        super(Reservoir, self).__init__()
+        super(Reservoir, self).__init__(basins)
 
     def order_contours(self):
         self.contours = sorted(self.contours, key=lambda contour: contour[0])
