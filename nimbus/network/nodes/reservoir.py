@@ -1,7 +1,7 @@
-
-from .node import Node
-from nimbus.math import interpolate_from_table, goal_seek
 from math import ceil
+
+from nimbus.network.nodes.node import Node
+from nimbus.math import interpolate_from_table, goal_seek
 from nimbus.reports import Report
 
 
@@ -60,13 +60,14 @@ class Reservoir(Node):
             storage = 0.0
         return storage
 
-    def get_stage(self, storage, tolerance=0.0001):
+    def get_stage(self, storage, time, tolerance=0.0001):
         bound1 = self.contours[0][0]
         bound2 = self.contours[-1][0]
         max_iterations = 100
         stage = goal_seek(self.get_storage, bound1, bound2, storage, max_iterations, tolerance)
         return stage
 
+    '''
     def get_discharge(self, links, stage1, stage2=0.0):
         discharge = 0.0
         for link in links:
@@ -98,6 +99,7 @@ class Reservoir(Node):
         storage = self.get_storage(stage1)
         storage_indicator = storage / time_step + discharge / 2.0
         return storage_indicator
+    '''
 
     def report_inputs(self, col_length=15):
         title = ' Reservoir '

@@ -1,8 +1,8 @@
-
 import copy
-from .reservoir import Reservoir
-from .pipe import Pipe
-from .weir import Weir
+
+from nimbus.network.nodes.reservoir import Reservoir
+from nimbus.network.links.pipe import Pipe
+from nimbus.network.links.weir import Weir
 
 
 class Network:

@@ -1,6 +1,6 @@
-
-from .link import Link
 from math import pow, sqrt
+
+from nimbus.network.links.link import Link
 
 
 class Weir(Link):

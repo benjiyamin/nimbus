@@ -5,9 +5,9 @@ from math import ceil
 
 class Simulation:
 
-    def __init__(self, path, name=None, duration=None, interval=None,
+    def __init__(self, filepath, name=None, duration=None, interval=None,
                  rainfall=None, distribution=None, networks=None):
-        self.path = path
+        self.filepath = filepath
         self.name = name
         self.duration = duration
         self.interval = interval
@@ -55,8 +55,8 @@ class Simulation:
                     delta_storage = flow * self.interval / 43560.0 / 60.0 / 60.0                        # ac-ft
                     node1_storage = node1.get_storage(node1.stage) + delta_storage                      # ac-ft
                     node2_storage = node2.get_storage(node2.stage) - delta_storage                      # ac-ft
-                    node1.curr_stage = node1.get_stage(node1_storage)
-                    node2.curr_stage = node2.get_stage(node2_storage)
+                    node1.curr_stage = node1.get_stage(node1_storage, time)
+                    node2.curr_stage = node2.get_stage(node2_storage, time)
                     link.flow_couples.append((time, link.curr_flow))
                 for node in network.nodes:
                     node.stage_couples.append((time, node.curr_stage))
@@ -72,7 +72,7 @@ class Simulation:
         return result
 
     def write(self, result):
-        result.write(self.path)
+        result.write(self.filepath)
         return
 
     def run_and_write(self):

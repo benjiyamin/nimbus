@@ -1,6 +1,6 @@
 
-from .weir import Weir
-from .link import Link
+from nimbus.network.links.weir import Weir
+from nimbus.network.links.link import Link
 
 
 class Inlet(Link):
@@ -20,7 +20,8 @@ class Inlet(Link):
 
     def get_flow(self, stage1, stage2):
         pipe_flow = self.pipe.get_flow(stage1, stage2)
-        weir_flow = sum([weir.get_flow(stage1, stage2) for weir in self.weirs])
+        inlet_weirs = [weir.get_flow(stage1, stage2) for weir in self.weirs]
+        weir_flow = sum(inlet_weirs)
         if weir_flow > 0.0 and pipe_flow > 0.0:
             flow = min(weir_flow, pipe_flow)
         elif weir_flow < 0.0 and pipe_flow < 0.0:

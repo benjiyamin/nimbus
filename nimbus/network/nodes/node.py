@@ -11,3 +11,7 @@ class Node:
     def add_basin(self, basin):
         self.basins.append(basin)
         return
+
+    def get_stage(self, storage, time):
+        stage = 0.0
+        return stage

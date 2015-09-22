@@ -1,7 +1,7 @@
-
 from math import pow, sqrt
-from .link import Link
-from .weir import Weir
+
+from nimbus.network.links.link import Link
+from nimbus.network.links.weir import Weir
 from nimbus.reports import Report
 
 

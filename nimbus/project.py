@@ -9,6 +9,7 @@ class Project:
 
     def __init__(self, directory, name=None):
         self.directory = directory
+        self.name = name
         self.networks = []
         self.simulations = []
         self.hydrographs = []
