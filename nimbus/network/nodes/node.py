@@ -13,5 +13,5 @@ class Node:
         return
 
     def get_stage(self, storage, time):
-        stage = 0.0
+        stage = None
         return stage

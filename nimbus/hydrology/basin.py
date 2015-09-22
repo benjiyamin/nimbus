@@ -87,14 +87,21 @@ class Basin:
         potential_retention = 1000.0 / self.cn - 10.0
         return potential_retention
 
-    def report_inputs(self, col_length=15):
+    def report_inputs(self):
         title = ' Basin '
         report = Report()
+        inputs = self.get_inputs()
         report.add_title(title)
-        report.add_string_line('Name: ' + str(self.name))
-        report.add_string_line('Area (ac): ' + str(self.area))
-        report.add_string_line('Curve Number: ' + str(self.cn))
-        report.add_string_line('Time of Conc (min): ' + str(self.tc))
-        report.add_string_line('Unit Hydrograph: ' + str(self.uh.name))
-        report.add_string_line('Peak Factor: ' + str(self.uh.peak_factor))
+        for string in inputs:
+            report.add_string_line(string)
         report.output()
+        return
+
+    def get_inputs(self):
+        inputs = ['Name: ' + str(self.name),
+                  'Area (ac): ' + str(self.area),
+                  'Curve Number: ' + str(self.cn),
+                  'Time of Conc (min): ' + str(self.tc),
+                  'Unit Hydrograph: ' + str(self.uh.name),
+                  'Peak Factor: ' + str(self.uh.peak_factor)]
+        return inputs

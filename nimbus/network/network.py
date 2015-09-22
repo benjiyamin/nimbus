@@ -3,6 +3,7 @@ import copy
 from nimbus.network.nodes.reservoir import Reservoir
 from nimbus.network.links.pipe import Pipe
 from nimbus.network.links.weir import Weir
+from nimbus.reports import Report
 
 
 class Network:
@@ -55,5 +56,15 @@ class Network:
         self.links.append(copy_link)
         return copy_link
 
-    def print_nodes(self):
-        pass
+    def report_basins(self, col_length=15):
+        title = ' Basins '
+        report = Report()
+        report.add_title(title)
+        for node in self.nodes:
+            for basin in node:
+                basin_inputs = basin.get_inputs()
+                for string in basin_inputs:
+                    report.add_string_line(string)
+                report.add_blank_line()
+        report.output()
+        return

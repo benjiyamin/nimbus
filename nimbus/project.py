@@ -3,6 +3,7 @@ from nimbus.network import Network
 from nimbus.simulation import Simulation
 from nimbus.hydrology import UnitHydrograph
 from nimbus.storms import RainfallDistribution
+from nimbus.reports import Report
 
 
 class Project:
@@ -14,7 +15,7 @@ class Project:
         self.simulations = []
         self.hydrographs = []
         self.distributions = []
-        self.saved = False
+        #self.saved = False
 
     def clear_all(self):
         """Remove all objects from the project lists and delete them."""
@@ -28,6 +29,7 @@ class Project:
         """Create a network, add it to the network list, and return the object."""
         new_network = Network(name)
         self.networks.append(new_network)
+        print('Success: New network created.')
         return new_network
 
     def delete_network(self, network):
@@ -99,4 +101,40 @@ class Project:
         """Remove all distribution from the distribution list and delete them."""
         for distribution in self.distributions:
             self.delete_distribution(distribution)
+        return
+
+    def report(self, title, report_list):
+        report = Report()
+        report.add_title(title)
+        for i, thing in enumerate(report_list):
+            if not thing.name:
+                name_string = 'Unnamed'
+            else:
+                name_string = thing.name
+            report.add_string_line(str(i) + ': ' + name_string)
+        report.output()
+        return
+
+    def report_networks(self):
+        title = ' Networks '
+        report_list = self.networks
+        self.report(title, report_list)
+        return
+
+    def report_hydrographs(self):
+        title = ' Hydrographs '
+        report_list = self.hydrographs
+        self.report(title, report_list)
+        return
+
+    def report_simulations(self):
+        title = ' Simulations '
+        report_list = self.simulations
+        self.report(title, report_list)
+        return
+
+    def report_distributions(self):
+        title = ' Distributions '
+        report_list = self.distributions
+        self.report(title, report_list)
         return

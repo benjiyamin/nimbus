@@ -1,5 +1,5 @@
 
-from nimbus.simulation import Result
+from .result import Result
 from math import ceil
 
 
@@ -53,8 +53,8 @@ class Simulation:
                     node2 = link.node2
                     flow = (link.get_flow(node1.curr_stage, node2.curr_stage) + link.curr_flow) / 2.0   # cfs
                     delta_storage = flow * self.interval / 43560.0 / 60.0 / 60.0                        # ac-ft
-                    node1_storage = node1.get_storage(node1.stage) + delta_storage                      # ac-ft
-                    node2_storage = node2.get_storage(node2.stage) - delta_storage                      # ac-ft
+                    node1_storage = node1.get_storage(node1.curr_stage) + delta_storage                 # ac-ft
+                    node2_storage = node2.get_storage(node2.curr_stage) - delta_storage                 # ac-ft
                     node1.curr_stage = node1.get_stage(node1_storage, time)
                     node2.curr_stage = node2.get_stage(node2_storage, time)
                     link.flow_couples.append((time, link.curr_flow))

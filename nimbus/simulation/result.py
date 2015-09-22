@@ -11,7 +11,7 @@ class Result:
     def write(self, filepath):
         """Pickle self to a save file"""
         if ".nrf" in filepath:
-            filepath = filepath
+            pass
         elif "." in filepath:
             raise ValueError("Filename must have '.nrf' extension!")
         else:

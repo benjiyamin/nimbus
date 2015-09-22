@@ -29,5 +29,6 @@ class Report:
         return
 
     def output(self):
+        self.add_blank_line()
         for line in self.lines:
             print(line)
