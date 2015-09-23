@@ -51,7 +51,7 @@ class Report:
             print(line)
 
 
-def show_object_list(title, object_list):
+def show_object_list(title, object_list, show_class=False):
     report = Report()
     report.add_title(title)
     for i, thing in enumerate(object_list):
@@ -59,6 +59,26 @@ def show_object_list(title, object_list):
             name_string = 'Unnamed'
         else:
             name_string = thing.name
-        report.add_string_line('%s: %s' % (i, name_string))
+        if show_class is False:
+            report.add_string_line('%s: %s' % (i, name_string))
+        else:
+            report.add_string_line('%s: %s (%s)' % (i, name_string, thing.__class__.__name__))
     report.output()
     return
+
+
+def float_to_string(number, decimals):
+    if number is not None:
+        string = ("{:.%sf}" % decimals).format(number)
+    else:
+        string = 'Undefined'
+    return string
+
+
+def property_to_string(object, property):
+    if object is not None:
+        string = str(getattr(object, property))
+    else:
+        string = 'Undefined'
+    return string
+

@@ -2,7 +2,7 @@ from math import ceil
 
 from nimbus.network.nodes.node import Node
 from nimbus.math import interpolate_from_table, goal_seek
-from nimbus.reports import Report
+from nimbus.reports import Report, float_to_string, property_to_string
 
 
 class Reservoir(Node):
@@ -24,9 +24,10 @@ class Reservoir(Node):
         new_contour = (elevation, area)
         self.contours.append(new_contour)
         self.order_contours()
-        return new_contour
+        return
 
-    def delete_contour(self, contour):
+    def delete_contour(self, index):
+        contour = self.contours[index]
         self.contours.remove(contour)
         del contour
         return
@@ -67,12 +68,12 @@ class Reservoir(Node):
         stage = goal_seek(self.get_storage, bound1, bound2, storage, max_iterations, tolerance)
         return stage
 
-    def report_inputs(self, title=True, col_length=15):
+    def report_inputs(self, title=True):
         title = 'Reservoir'
         col1_title = 'Stage (ft)'
         col2_title = 'Area (ac)'
         report = Report()
-        if title is True:
+        if title:
             report.add_title(title)
         inputs = self.get_inputs()
         for string in inputs:
@@ -82,13 +83,13 @@ class Reservoir(Node):
         report.add_to_columns(entries)
         report.add_columns_line(len(entries))
         for contour in self.contours:
-            report.add_to_columns([str(round(contour[0], 4)), str(round(contour[1], 4))])
+            report.add_to_columns(["{:.3f}".format(contour[0]), "{:.3f}".format(contour[1])])
         report.output()
         return
 
     def get_inputs(self):
-        inputs = ['Name: ' + str(self.name),
-                  'Starting Stage (ft): ' + str(self.start_stage)]
+        inputs = ['Name: ' + property_to_string(self, 'name'),
+                  'Starting Stage (ft): ' + float_to_string(self.start_stage, 3)]
         return inputs
 
 

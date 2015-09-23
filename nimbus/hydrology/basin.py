@@ -1,6 +1,6 @@
 
 from math import pow
-from nimbus.reports import Report
+from nimbus.reports import Report, property_to_string, float_to_string
 
 
 class Basin:
@@ -87,10 +87,11 @@ class Basin:
         potential_retention = 1000.0 / self.cn - 10.0
         return potential_retention
 
-    def report_inputs(self):
+    def report_inputs(self, title=True):
         title = 'Basin'
         report = Report()
-        report.add_title(title)
+        if title:
+            report.add_title(title)
         inputs = self.get_inputs()
         for string in inputs:
             report.add_string_line(string)
@@ -98,10 +99,10 @@ class Basin:
         return
 
     def get_inputs(self):
-        inputs = ['Name: ' + str(self.name),
-                  'Area (ac): ' + str(self.area),
-                  'Curve Number: ' + str(self.cn),
-                  'Time of Conc (min): ' + str(self.tc),
-                  'Unit Hydrograph: ' + str(self.uh.name),
-                  'Peak Factor: ' + str(self.uh.peak_factor)]
+        inputs = ['Name: ' + property_to_string(self, 'name'),
+                  'Area (ac): ' + float_to_string(self.area, 3),
+                  'Curve Number: ' + float_to_string(self.cn, 2),
+                  'Time of Conc (min): ' + float_to_string(self.tc, 2),
+                  'Unit Hydrograph: ' + property_to_string(self.uh, 'name'),
+                  'Peak Factor: ' + property_to_string(self.uh, 'peak_factor')]
         return inputs
