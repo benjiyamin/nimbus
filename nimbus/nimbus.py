@@ -9,7 +9,7 @@ class Nimbus:
     def __init__(self):
         self.project = None
         self.filepath = ''
-        print("Success: Nimbus is locked and loaded.")
+        print("Success: Nimbus is loaded and ready to go.")
 
     def new_project(self, directory):
         """Create a project with the defined directory, set it as nimbus's project, and return the object."""
@@ -25,7 +25,7 @@ class Nimbus:
             try:
                 open_file = open(self.filepath, "wb")
             except:
-                raise ValueError("File path " + self.filepath + " not found. Define a filename.")
+                raise ValueError("File path '%s' not found. Define a filename." % self.filepath)
             log_filepath = self.filepath
         else:
             if ".npf" in filepath:
@@ -38,7 +38,7 @@ class Nimbus:
             open_file = open(filepath, "wb")
         pickle.dump(self.project, open_file)
         open_file.close()
-        print('Success: Project saved to ' + log_filepath)
+        print("Success: Project saved to '%s'" % log_filepath)
         return
 
     def load_project(self, filepath):
@@ -51,5 +51,5 @@ class Nimbus:
         open_file.close()
         self.project = project
         self.filepath = filepath
-        print('Success: Project loaded from ' + filepath)
+        print("Success: Project loaded from '%s'" % filepath)
         return

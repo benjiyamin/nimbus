@@ -3,7 +3,7 @@ from nimbus.network import Network
 from nimbus.simulation import Simulation
 from nimbus.hydrology import UnitHydrograph
 from nimbus.storms import RainfallDistribution
-from nimbus.reports import Report
+from nimbus.reports import show_object_list
 
 
 class Project:
@@ -15,7 +15,6 @@ class Project:
         self.simulations = []
         self.hydrographs = []
         self.distributions = []
-        #self.saved = False
 
     def clear_all(self):
         """Remove all objects from the project lists and delete them."""
@@ -30,28 +29,32 @@ class Project:
         new_network = Network(name)
         self.networks.append(new_network)
         print('Success: New network created.')
-        return new_network
+        return
 
-    def delete_network(self, network):
-        """Remove the specified network from the network list and delete it."""
+    def delete_network(self, index):
+        """Remove the network at the specified index from the network list and delete it."""
+        network = self.networks[index]
         self.networks.remove(network)
         del network
+        print("Success: Network at index %s has been deleted." % index)
         return
     
     def clear_networks(self):
         """Remove all network from the network list and delete them."""
         for network in self.networks:
             self.delete_network(network)
+        print("Success: All Network objects have been deleted.")
         return
     
     def create_simulation(self, *args, **kwargs):
         """Create a simulation, add it to the simulation list, and return the object."""
         new_simulation = Simulation(*args, **kwargs)
         self.simulations.append(new_simulation)
-        return new_simulation
+        return
 
-    def delete_simulation(self, simulation):
-        """Remove the specified simulation from the simulation list and delete it."""
+    def delete_simulation(self, index):
+        """Remove the simulation at the specified index from the simulation list and delete it."""
+        simulation = self.simulations[index]
         self.simulations.remove(simulation)
         del simulation
         return
@@ -60,13 +63,14 @@ class Project:
         """Remove all simulation from the simulation list and delete them."""
         for simulation in self.simulations:
             self.delete_simulation(simulation)
+        print("Success: All Simulation objects have been deleted.")
         return
     
     def create_hydrograph(self, *args, **kwargs):
         """Create a hydrograph, add it to the hydrograph list, and return the object."""
         new_hydrograph = UnitHydrograph(*args, **kwargs)
         self.hydrographs.append(new_hydrograph)
-        return new_hydrograph
+        return
 
     def add_hydrograph(self, hydrograph):
         """Add the specified hydrograph to the hydrograph list."""
@@ -83,13 +87,14 @@ class Project:
         """Remove all hydrograph from the hydrograph list and delete them."""
         for hydrograph in self.hydrographs:
             self.delete_hydrograph(hydrograph)
+        print("Success: All Hydrograph objects have been deleted.")
         return
     
     def create_distribution(self, *args, **kwargs):
         """Create a distribution, add it to the distribution list, and return the object."""
         new_distribution = RainfallDistribution(*args, **kwargs)
         self.distributions.append(new_distribution)
-        return new_distribution
+        return
 
     def delete_distribution(self, distribution):
         """Remove the specified distribution from the distribution list and delete it."""
@@ -101,40 +106,45 @@ class Project:
         """Remove all distribution from the distribution list and delete them."""
         for distribution in self.distributions:
             self.delete_distribution(distribution)
+        print("Success: All Distribution objects have been deleted.")
         return
 
-    def report(self, title, report_list):
-        report = Report()
-        report.add_title(title)
-        for i, thing in enumerate(report_list):
-            if not thing.name:
-                name_string = 'Unnamed'
-            else:
-                name_string = thing.name
-            report.add_string_line(str(i) + ': ' + name_string)
-        report.output()
+    def show_networks(self):
+        title = 'Networks'
+        object_list = self.networks
+        show_object_list(title, object_list)
         return
 
-    def report_networks(self):
-        title = ' Networks '
-        report_list = self.networks
-        self.report(title, report_list)
+    def show_hydrographs(self):
+        title = 'Hydrographs'
+        object_list = self.hydrographs
+        show_object_list(title, object_list)
         return
 
-    def report_hydrographs(self):
-        title = ' Hydrographs '
-        report_list = self.hydrographs
-        self.report(title, report_list)
+    def show_simulations(self):
+        title = 'Simulations'
+        object_list = self.simulations
+        show_object_list(title, object_list)
         return
 
-    def report_simulations(self):
-        title = ' Simulations '
-        report_list = self.simulations
-        self.report(title, report_list)
+    def show_distributions(self):
+        title = 'Distributions'
+        object_list = self.distributions
+        show_object_list(title, object_list)
         return
 
-    def report_distributions(self):
-        title = ' Distributions '
-        report_list = self.distributions
-        self.report(title, report_list)
-        return
+
+'''
+@staticmethod
+def report_object_list(title, object_list):
+    report = Report()
+    report.add_title(title)
+    for i, thing in enumerate(object_list):
+        if not thing.name:
+            name_string = 'Unnamed'
+        else:
+            name_string = thing.name
+        report.add_string_line('%s: %s' % (i, name_string))
+    report.output()
+    return
+'''

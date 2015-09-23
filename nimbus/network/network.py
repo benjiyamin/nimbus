@@ -1,9 +1,8 @@
 import copy
 
 from nimbus.network.nodes.reservoir import Reservoir
-from nimbus.network.links.pipe import Pipe
-from nimbus.network.links.weir import Weir
-from nimbus.reports import Report
+from nimbus.network.links import Pipe, Weir
+from nimbus.reports import Report, show_object_list
 
 
 class Network:
@@ -18,53 +17,68 @@ class Network:
         """Create a reservoir, add it to the node list, and return the object."""
         new_reservoir = Reservoir(*args, **kwargs)
         self.nodes.append(new_reservoir)
-        return new_reservoir
+        return
 
     def create_pipe(self, *args, **kwargs):
         """Create a pipe, add it to the link list, and return the object."""
         new_pipe = Pipe(*args, **kwargs)
         self.links.append(new_pipe)
-        return new_pipe
+        return
 
     def create_weir(self, *args, **kwargs):
         """Create a weir, add it to the link list, and return the object."""
         new_weir = Weir(*args, **kwargs)
         self.links.append(new_weir)
-        return new_weir
+        return
 
-    def delete_node(self, node):
-        """Remove the specified node from the node list and delete it."""
+    def delete_node(self, index):
+        """Remove the node at the specified index from the node list and delete it."""
+        node = self.nodes[index]
         self.nodes.remove(node)
         del node
         return
 
-    def copy_node(self, node):
-        """Create a copy of the specified node, add it to the node list, and return the object."""
+    def copy_node(self, index):
+        """Create a copy of the node at the specified index from the node list and add it to the node list"""
+        node = self.nodes[index]
         copy_node = copy.copy(node)
         self.nodes.append(copy_node)
-        return copy_node
+        return
 
-    def delete_link(self, link):
-        """Remove the specified link from the link list and delete it."""
+    def delete_link(self, index):
+        """Remove the link at the specified index from the link list and delete it."""
+        link = self.links[index]
         self.links.remove(link)
         del link
         return
 
-    def copy_link(self, link):
-        """Create a copy of the specified link, add it to the link list, and return the object."""
+    def copy_link(self, index):
+        """Create a copy of the link at the specified index from the link list and add it to the link list"""
+        link = self.links[index]
         copy_link = copy.copy(link)
         self.links.append(copy_link)
-        return copy_link
+        return
 
-    def report_basins(self, col_length=15):
-        title = ' Basins '
+    def show_nodes(self):
+        title = 'Nodes'
+        object_list = self.nodes
+        show_object_list(title, object_list)
+        return
+
+    def show_links(self):
+        title = 'Links'
+        object_list = self.links
+        show_object_list(title, object_list)
+        return
+
+    def report_node_inputs(self):
+        title = 'Nodes'
         report = Report()
         report.add_title(title)
-        for node in self.nodes:
-            for basin in node:
-                basin_inputs = basin.get_inputs()
-                for string in basin_inputs:
-                    report.add_string_line(string)
-                report.add_blank_line()
         report.output()
+        for node in self.nodes:
+            report = Report()
+            node.report_inputs(title=False)
+            report.add_break_line()
+            report.output()
         return

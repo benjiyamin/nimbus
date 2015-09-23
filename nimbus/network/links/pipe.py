@@ -102,7 +102,7 @@ class Pipe(Link):
         return velocity
 
     def report_inputs(self, col_length=15):
-        title = ' Pipe '
+        title = 'Pipe'
         report = Report()
         report.add_title(title)
         report.add_string_line('Name: ' + str(self.name))

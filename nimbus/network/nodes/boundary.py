@@ -21,7 +21,7 @@ class Boundary(Node):
         return stage
 
     def report_inputs(self, col_length=15):
-        title = ' Boundary '
+        title = 'Boundary'
         col1_title = 'Time (hr)'
         col2_title = 'Stage (ac)'
         report = Report()
@@ -29,8 +29,8 @@ class Boundary(Node):
         report.add_string_line('Name: ' + str(self.name))
         report.add_string_line('Starting Stage: ' + str(self.start_stage))
         report.add_blank_line()
-        report.add_two_columns(col1_title, col2_title)
-        report.add_two_columns('-' * col_length, '-' * col_length)
+        report.add_to_columns([col1_title, col2_title])
+        report.add_to_columns(['-' * col_length, '-' * col_length])
         for contour in self.time_stages:
-            report.add_two_columns(str(round(contour[0], 4)), str(round(contour[1], 4)))
+            report.add_to_columns([str(round(contour[0], 4)), str(round(contour[1], 4))])
         report.output()

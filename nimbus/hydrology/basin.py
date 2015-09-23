@@ -88,10 +88,10 @@ class Basin:
         return potential_retention
 
     def report_inputs(self):
-        title = ' Basin '
+        title = 'Basin'
         report = Report()
-        inputs = self.get_inputs()
         report.add_title(title)
+        inputs = self.get_inputs()
         for string in inputs:
             report.add_string_line(string)
         report.output()
