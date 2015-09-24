@@ -1,6 +1,6 @@
 
 import copy
-from nimbus.network.nodes import Reservoir, Boundary
+from nimbus.network.nodes import Node, Reservoir, Boundary
 from nimbus.network.links import Pipe, Weir
 from nimbus.reports import Report, show_object_list
 
@@ -12,6 +12,12 @@ class Network:
         self.name = name
         self.nodes = []
         self.links = []
+    
+    def create_node(self, *args, **kwargs):
+        """Create a node and add it to the node list."""
+        new_node = Node(*args, **kwargs)
+        self.nodes.append(new_node)
+        return
 
     def create_reservoir(self, *args, **kwargs):
         """Create a reservoir and add it to the node list."""

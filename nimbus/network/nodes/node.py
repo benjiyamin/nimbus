@@ -6,7 +6,8 @@ from nimbus.reports import show_object_list
 
 class Node:
 
-    def __init__(self, basins=None):
+    def __init__(self, name=None, basins=None):
+        self.name = name
         if basins is None:
             self.basins = []
         else:

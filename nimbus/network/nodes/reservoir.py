@@ -9,12 +9,11 @@ class Reservoir(Node):
 
     def __init__(self, start_stage=None, contours=None, name=None, basins=None):
         self.start_stage = start_stage
-        self.name = name
         if contours is None:
             self.contours = []
         else:
             self.contours = contours
-        super(Reservoir, self).__init__(basins)
+        super(Reservoir, self).__init__(name, basins)
 
     def order_contours(self):
         self.contours = sorted(self.contours, key=lambda contour: contour[0])
@@ -61,7 +60,7 @@ class Reservoir(Node):
             storage = 0.0
         return storage
 
-    def get_stage(self, storage, time, tolerance=0.0001):
+    def get_stage(self, storage, time=None, tolerance=0.0001):
         bound1 = self.contours[0][0]
         bound2 = self.contours[-1][0]
         max_iterations = 100

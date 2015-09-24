@@ -21,7 +21,7 @@ class Nimbus:
     def save_project(self, filepath=None):
         """Pickle project object to a save file"""
         #os.chdir(self.project.directory)
-        if not filepath:
+        if filepath is None:
             try:
                 open_file = open(self.filepath, "wb")
             except:
