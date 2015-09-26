@@ -21,6 +21,22 @@ class ReservoirTest(unittest.TestCase):
         self.assertAlmostEqual(test_elevation, elevation, 3)
 
 
+class NetworkTest(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_copy_node(self):
+        from nimbus import Nimbus
+        nimbus = Nimbus()
+        nimbus.new_project()
+        nimbus.project.create_network(name='Test Network')
+        network = nimbus.project.networks[0]
+        network.create_node(name='Test Node')
+        network.copy_node(0)
+        self.assertNotEqual(network.nodes[0], network.nodes[1])
+
+
 class SimulationTest(unittest.TestCase):
 
     def setUp(self):
@@ -28,9 +44,8 @@ class SimulationTest(unittest.TestCase):
 
     def test_copy(self):
         from nimbus import Nimbus
-        import os
         nimbus = Nimbus()
-        nimbus.new_project(os.getcwd())
+        nimbus.new_project()
         nimbus.project.create_network(name='Test Network')
         network = nimbus.project.networks[0]
         network.create_node(name='Test Node')
@@ -44,8 +59,8 @@ class SimulationTest(unittest.TestCase):
         simulation.rainfall = 1.0
         from nimbus.storms.defaults import sfwmd72
         simulation.distribution = sfwmd72
-        result = simulation.run_and_get_result()
-        result_node = result.nodes[0]
+        simulation.run_and_set_result()
+        result_node = simulation.result.nodes[0]
         self.assertNotEqual(network_node, result_node)
 
 

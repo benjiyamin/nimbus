@@ -10,7 +10,7 @@ class Trapezoid(Shape):
         self.rise = rise  # inches
         self.left_slope = left_slope
         self.right_slope = right_slope
-        super(Trapezoid, self).__init__(geometry='Trapezoid')
+        super(Trapezoid, self).__init__()
 
     def get_flow_area(self, depth):
         """Return the flow area in SF at a given depth from the invert of the shape."""

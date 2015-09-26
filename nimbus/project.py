@@ -1,4 +1,5 @@
 
+import copy
 from nimbus.network import Network
 from nimbus.simulation import Simulation
 from nimbus.hydrology import UnitHydrograph
@@ -8,8 +9,8 @@ from nimbus.reports import show_object_list
 
 class Project:
 
-    def __init__(self, directory, name=None):
-        self.directory = directory
+    def __init__(self, name=None):
+        #self.directory = directory
         self.name = name
         self.networks = []
         self.simulations = []
@@ -24,19 +25,36 @@ class Project:
         self.clear_distributions()
         return
 
-    def create_network(self, name=None):
+    @staticmethod
+    def delete_from_list(index, _list):
+        thing = _list[index]
+        _list.remove(thing)
+        del thing
+        return
+    
+    @staticmethod
+    def copy_from_list(index, _list):
+        thing = _list[index]
+        copy_thing = copy.deepcopy(thing)
+        _list.append(copy_thing)
+        return
+
+    def create_network(self, *args, **kwargs):
         """Create a network, add it to the network list, and return the object."""
-        new_network = Network(name)
+        new_network = Network(*args, **kwargs)
         self.networks.append(new_network)
         print('Success: New network created.')
         return
 
     def delete_network(self, index):
         """Remove the network at the specified index from the network list and delete it."""
-        network = self.networks[index]
-        self.networks.remove(network)
-        del network
+        self.delete_from_list(index, self.networks)
         print("Success: Network at index %s has been deleted." % index)
+        return
+    
+    def copy_network(self, index):
+        """Create a copy of the network at the specified index from the network list and append it to the list"""
+        self.copy_from_list(index, self.networks)
         return
     
     def clear_networks(self):
@@ -54,9 +72,12 @@ class Project:
 
     def delete_simulation(self, index):
         """Remove the simulation at the specified index from the simulation list and delete it."""
-        simulation = self.simulations[index]
-        self.simulations.remove(simulation)
-        del simulation
+        self.delete_from_list(index, self.simulations)
+        return
+    
+    def copy_simulation(self, index):
+        """Create a copy of the simulation at the specified index from the simulation list and append it to the list"""
+        self.copy_from_list(index, self.simulations)
         return
     
     def clear_simulations(self):
@@ -77,10 +98,14 @@ class Project:
         self.hydrographs.append(hydrograph)
         return
 
-    def delete_hydrograph(self, hydrograph):
-        """Remove the specified hydrograph from the hydrograph list and delete it."""
-        self.hydrographs.remove(hydrograph)
-        del hydrograph
+    def delete_hydrograph(self, index):
+        """Remove the hydrograph at the specified index from the hydrograph list and delete it."""
+        self.delete_from_list(index, self.hydrographs)
+        return
+    
+    def copy_hydrograph(self, index):
+        """Create a copy of the hydrograph at the specified index from the hydrograph list and append it to the list"""
+        self.copy_from_list(index, self.hydrographs)
         return
 
     def clear_hydrographs(self):
@@ -96,10 +121,14 @@ class Project:
         self.distributions.append(new_distribution)
         return
 
-    def delete_distribution(self, distribution):
-        """Remove the specified distribution from the distribution list and delete it."""
-        self.distributions.remove(distribution)
-        del distribution
+    def delete_distribution(self, index):
+        """Remove the distribution at the specified index from the distribution list and delete it."""
+        self.delete_from_list(index, self.distributions)
+        return
+    
+    def copy_distribution(self, index):
+        """Create a copy of the distribution at the specified index from the distribution list and append it to the list"""
+        self.copy_from_list(index, self.distributions)
         return
     
     def clear_distributions(self):

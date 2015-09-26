@@ -1,13 +1,14 @@
 
 import copy
 from nimbus.hydrology import Basin
-from nimbus.reports import show_object_list
+from nimbus.reports import show_object_list, property_to_string, float_to_string
 
 
 class Node:
 
-    def __init__(self, name=None, basins=None):
+    def __init__(self, name=None, start_stage=None, basins=None):
         self.name = name
+        self.start_stage = start_stage
         if basins is None:
             self.basins = []
         else:
@@ -26,21 +27,28 @@ class Node:
         del basin
         return
 
-    '''
     def copy_basin(self, index):
         """Create a copy of the basin at the specified index from the basin list and add it to the basin list"""
         basin = self.basins[index]
-        copy_basin = copy.copy(basin)
+        copy_basin = copy.deepcopy(basin)
         self.basins.append(copy_basin)
         return
-    '''
 
     def get_stage(self, storage, time):
-        stage = None
+        stage = 0.0
         return stage
+
+    def get_storage(self, elevation):
+        storage = 0.0
+        return storage
 
     def show_basins(self):
         title = 'Basins'
         object_list = self.basins
         show_object_list(title, object_list)
         return
+
+    def get_inputs(self):
+        inputs = ['Name: ' + property_to_string(self, 'name'),
+                  'Starting Stage (ft): ' + float_to_string(self.start_stage, 3)]
+        return inputs

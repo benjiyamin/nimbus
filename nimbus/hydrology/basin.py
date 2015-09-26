@@ -87,10 +87,10 @@ class Basin:
         potential_retention = 1000.0 / self.cn - 10.0
         return potential_retention
 
-    def report_inputs(self, title=True):
+    def report_inputs(self, show_title=True):
         title = 'Basin'
         report = Report()
-        if title:
+        if show_title is True:
             report.add_title(title)
         inputs = self.get_inputs()
         for string in inputs:

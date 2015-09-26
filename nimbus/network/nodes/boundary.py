@@ -7,13 +7,12 @@ from nimbus.reports import Report, float_to_string, property_to_string
 
 class Boundary(Node):
 
-    def __init__(self, start_stage=None, time_stages=None, name=None, basins=None):
-        self.start_stage = start_stage
+    def __init__(self, name=None, start_stage=None, time_stages=None, basins=None):
         if time_stages is None:
             self.time_stages = []
         else:
             self.time_stages = time_stages
-        super(Boundary, self).__init__(name, basins)
+        super(Boundary, self).__init__(name, start_stage, basins)
 
     def get_stage(self, storage, time):
         stage = interpolate_from_table(time, self.time_stages, 0, 1)
@@ -35,26 +34,19 @@ class Boundary(Node):
         del time_stage
         return
 
-    def report_inputs(self, title=True):
-        title = 'Boundary'
-        col1_title = 'Time (hr)'
-        col2_title = 'Stage (ft)'
+    def report_inputs(self, show_title=True):
         report = Report()
-        if title:
+        if show_title is True:
+            title = 'Boundary'
             report.add_title(title)
         inputs = self.get_inputs()
         for string in inputs:
             report.add_string_line(string)
         report.add_blank_line()
-        entries = [col1_title, col2_title]
+        entries = ['Time (hr)', 'Stage (ft)']
         report.add_to_columns(entries)
         report.add_columns_line(len(entries))
         for time_stage in self.time_stages:
             report.add_to_columns(["{:.3f}".format(time_stage[0]), "{:.3f}".format(time_stage[1])])
         report.output()
         return
-
-    def get_inputs(self):
-        inputs = ['Name: ' + property_to_string(self, 'name'),
-                  'Starting Stage (ft): ' + float_to_string(self.start_stage, 3)]
-        return inputs

@@ -2,8 +2,8 @@
 
 class Shape:
 
-    def __init__(self, geometry=None):
-        self.geometry = geometry
+    def __init__(self):
+        pass
 
     def get_flow_area(self, depth):
         flow_area = 0.0

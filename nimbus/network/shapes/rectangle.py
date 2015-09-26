@@ -7,7 +7,7 @@ class Rectangle(Shape):
     def __init__(self, span, rise):
         self.span = span  # inches
         self.rise = rise  # inches
-        super(Rectangle, self).__init__(geometry='Rectangle')
+        super(Rectangle, self).__init__()
 
     def get_flow_area(self, depth):
         """Return the flow area in SF at a given depth from the invert of the shape."""

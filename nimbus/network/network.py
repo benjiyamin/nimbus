@@ -1,7 +1,7 @@
 
 import copy
 from nimbus.network.nodes import Node, Reservoir, Boundary
-from nimbus.network.links import Pipe, Weir
+from nimbus.network.links import Link, Pipe, Weir, Inlet
 from nimbus.reports import Report, show_object_list
 
 
@@ -31,6 +31,14 @@ class Network:
         self.nodes.append(new_boundary)
         return
 
+    '''
+    def create_link(self, *args, **kwargs):
+        """Create a link and add it to the link list."""
+        new_link = Link(*args, **kwargs)
+        self.links.append(new_link)
+        return
+    '''
+
     def create_pipe(self, *args, **kwargs):
         """Create a pipe and add it to the link list."""
         new_pipe = Pipe(*args, **kwargs)
@@ -42,6 +50,12 @@ class Network:
         new_weir = Weir(*args, **kwargs)
         self.links.append(new_weir)
         return
+    
+    def create_inlet(self, *args, **kwargs):
+        """Create an inlet and add it to the link list."""
+        new_inlet = Inlet(*args, **kwargs)
+        self.links.append(new_inlet)
+        return
 
     def delete_node(self, index):
         """Remove the node at the specified index from the node list and delete it."""
@@ -50,14 +64,12 @@ class Network:
         del node
         return
 
-    '''
     def copy_node(self, index):
         """Create a copy of the node at the specified index from the node list and add it to the node list"""
         node = self.nodes[index]
-        copy_node = copy.copy(node)
+        copy_node = copy.deepcopy(node)
         self.nodes.append(copy_node)
         return
-    '''
 
     def delete_link(self, index):
         """Remove the link at the specified index from the link list and delete it."""
@@ -66,14 +78,12 @@ class Network:
         del link
         return
 
-    '''
     def copy_link(self, index):
         """Create a copy of the link at the specified index from the link list and add it to the link list"""
         link = self.links[index]
-        copy_link = copy.copy(link)
+        copy_link = copy.deepcopy(link)
         self.links.append(copy_link)
         return
-    '''
 
     def show_nodes(self):
         title = 'Nodes'
@@ -94,7 +104,7 @@ class Network:
         report.output()
         for node in self.nodes:
             report = Report()
-            node.report_inputs(title=False)
+            node.report_inputs(show_title=False)
             report.add_break_line()
             report.output()
         return
@@ -107,7 +117,7 @@ class Network:
         for node in self.nodes:
             for basin in node.basins:
                 report = Report()
-                basin.report_inputs(title=False)
+                basin.report_inputs(show_title=False)
                 report.add_break_line()
                 report.output()
         return

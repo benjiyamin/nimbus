@@ -11,22 +11,20 @@ class Nimbus:
         self.filepath = ''
         print("Success: Nimbus is loaded and ready to go.")
 
-    def new_project(self, directory):
-        """Create a project with the defined directory, set it as nimbus's project, and return the object."""
-        new_project = Project(directory)
+    def new_project(self):
+        """Create a project and set it as nimbus's project."""
+        new_project = Project()
         self.project = new_project
         print("Success: New project created.")
-        return new_project
+        return
 
     def save_project(self, filepath=None):
         """Pickle project object to a save file"""
-        #os.chdir(self.project.directory)
         if filepath is None:
             try:
                 open_file = open(self.filepath, "wb")
             except:
                 raise ValueError("File path '%s' not found. Define a filename." % self.filepath)
-            log_filepath = self.filepath
         else:
             if ".npf" in filepath:
                 pass
@@ -34,11 +32,11 @@ class Nimbus:
                 raise ValueError("Filename must have '.npf' extension!")
             else:
                 filepath += ".npf"
-            log_filepath = filepath
             open_file = open(filepath, "wb")
+            self.filepath = os.path.abspath(filepath)
         pickle.dump(self.project, open_file)
         open_file.close()
-        print("Success: Project saved to '%s'" % log_filepath)
+        print("Success: Project saved to '%s'" % self.filepath)
         return
 
     def load_project(self, filepath):
@@ -50,6 +48,6 @@ class Nimbus:
             raise ValueError("Not a valid file!")
         open_file.close()
         self.project = project
-        self.filepath = filepath
-        print("Success: Project loaded from '%s'" % filepath)
+        self.filepath = os.path.abspath(filepath)
+        print("Success: Project loaded from '%s'" % self.filepath)
         return

@@ -1,8 +1,8 @@
 from math import pow, sqrt
 
-from nimbus.network.links.link import Link
-from nimbus.network.links.weir import Weir
-from nimbus.reports import Report
+from .link import Link
+from .weir import Weir
+from nimbus.reports import Report, property_to_string, float_to_string
 
 
 class Pipe(Link):
@@ -101,17 +101,37 @@ class Pipe(Link):
             velocity = sqrt(a / b)
         return velocity
 
-    def report_inputs(self, col_length=15):
-        title = 'Pipe'
+    def report_inputs(self, show_title=True):
         report = Report()
-        report.add_title(title)
-        report.add_string_line('Name: ' + str(self.name))
-        report.add_string_line('Shape Type: ' + str(self.shape.geometry))
-        report.add_string_line('Mannings: ' + str(self.mannings))
-        report.add_string_line('Length: ' + str(self.length))
-        report.add_string_line('Invert 1: ' + str(self.invert1))
-        report.add_string_line('Invert 2: ' + str(self.invert2))
+        if show_title is True:
+            title = 'Pipe'
+            report.add_title(title)
+        inputs = self.get_inputs()
+        for string in inputs:
+            report.add_string_line(string)
         report.output()
+        return
+
+    def get_inputs(self):
+        if self.shape:
+            shape_type = property_to_string(self.shape.__class__, '__name__')
+            shape_span = float_to_string(self.shape.span, 3)
+            shape_rise = float_to_string(self.shape.rise, 3)
+        else:
+            shape_type = 'Undefined'
+            shape_span = 'Undefined'
+            shape_rise = 'Undefined'
+        inputs = ['Name: ' + property_to_string(self, 'name'),
+                  'Node 1: ' + property_to_string(self.node1, 'name'),
+                  'Node 2: ' + property_to_string(self.node2, 'name'),
+                  'Shape Type: ' + shape_type,
+                  'Span (in): ' + shape_span,
+                  'Rise (in): ' + shape_rise,
+                  'Mannings: ' + float_to_string(self.mannings, 3),
+                  'Length (ft): ' + float_to_string(self.length, 3),
+                  'Invert 1 (ft): ' + float_to_string(self.invert1, 3),
+                  'Invert 2 (ft): ' + float_to_string(self.invert2, 3)]
+        return inputs
 
     '''
     def get_average_depth(self, stage1, stage2):

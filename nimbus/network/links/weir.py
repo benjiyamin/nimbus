@@ -1,6 +1,7 @@
 from math import pow, sqrt
 
-from nimbus.network.links.link import Link
+from .link import Link
+from nimbus.reports import Report, property_to_string, float_to_string
 
 
 class Weir(Link):
@@ -30,11 +31,13 @@ class Weir(Link):
                     eff_head = stage1 - stage2
                 area = self.shape.get_flow_area(self.shape.rise)
                 flow = self.orif_coef * area * sqrt(2.0 * 32.2 * eff_head)
-            else:                                                               # weir flow
+            elif stage1 > self.invert:                                          # weir flow
                 eff_head = stage1 - self.invert
                 flow = self.weir_coef * self.shape.span * pow(eff_head, 1.5)
                 if stage2 > self.invert:                                        # submerged flow
                     flow *= 1.0 - pow(pow(stage2 / stage1, 1.5), 0.385)
+            else:
+                flow = 0.0
         else:                                                                   # stage 2 higher
             if stage2 > crown:                                                  # orifice flow
                 if stage1 < self.invert:                                        # free flow
@@ -43,9 +46,40 @@ class Weir(Link):
                     eff_head = stage2 - stage1
                 area = self.shape.get_flow_area(self.shape.rise)
                 flow = -self.orif_coef * area * sqrt(2.0 * 32.2 * eff_head)
-            else:                                                               # weir flow
+            elif stage2 > self.invert:                                          # weir flow
                 eff_head = stage2 - self.invert
                 flow = -self.weir_coef * self.shape.span * pow(eff_head, 1.5)
                 if stage1 > self.invert:                                        # submerged flow
                     flow *= 1.0 - pow(pow(stage1 / stage2, 1.5), 0.385)
+            else:
+                flow = 0.0
         return flow
+
+    def report_inputs(self, show_title=True):
+        report = Report()
+        if show_title is True:
+            title = 'Weir'
+            report.add_title(title)
+        inputs = self.get_inputs()
+        for string in inputs:
+            report.add_string_line(string)
+        report.output()
+        return
+
+    def get_inputs(self):
+        if self.shape:
+            shape_type = property_to_string(self.shape.__class__, '__name__')
+            shape_span = float_to_string(self.shape.span, 3)
+            shape_rise = float_to_string(self.shape.rise, 3)
+        else:
+            shape_type = 'Undefined'
+            shape_span = 'Undefined'
+            shape_rise = 'Undefined'
+        inputs = ['Name: ' + property_to_string(self, 'name'),
+                  'Shape Type: ' + shape_type,
+                  'Span (in): ' + shape_span,
+                  'Rise (in): ' + shape_rise,
+                  'Orifice Coef.: ' + float_to_string(self.orif_coef, 3),
+                  'Weir. Coef: ' + float_to_string(self.weir_coef, 3),
+                  'Invert: ' + float_to_string(self.invert, 3)]
+        return inputs

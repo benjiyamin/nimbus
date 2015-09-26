@@ -9,7 +9,7 @@ class Circle(Shape):
         self.diameter = diameter  # inches
         self.span = diameter  # inches
         self.rise = diameter  # inches
-        super(Circle, self).__init__(geometry='Circle')
+        super(Circle, self).__init__()
 
     def get_alpha(self, depth):
         """Return the alpha value utilized for circular hydraulics."""

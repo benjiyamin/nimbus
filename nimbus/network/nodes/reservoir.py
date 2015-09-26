@@ -1,5 +1,5 @@
-from math import ceil
 
+from math import ceil
 from nimbus.network.nodes.node import Node
 from nimbus.math import interpolate_from_table, goal_seek
 from nimbus.reports import Report, float_to_string, property_to_string
@@ -7,13 +7,12 @@ from nimbus.reports import Report, float_to_string, property_to_string
 
 class Reservoir(Node):
 
-    def __init__(self, start_stage=None, contours=None, name=None, basins=None):
-        self.start_stage = start_stage
+    def __init__(self, name=None, start_stage=None, contours=None, basins=None):
         if contours is None:
             self.contours = []
         else:
             self.contours = contours
-        super(Reservoir, self).__init__(name, basins)
+        super(Reservoir, self).__init__(name, start_stage, basins)
 
     def order_contours(self):
         self.contours = sorted(self.contours, key=lambda contour: contour[0])
@@ -61,41 +60,31 @@ class Reservoir(Node):
         return storage
 
     def get_stage(self, storage, time=None, tolerance=0.0001):
-        bound1 = self.contours[0][0]
-        bound2 = self.contours[-1][0]
-        max_iterations = 100
-        stage = goal_seek(self.get_storage, bound1, bound2, storage, max_iterations, tolerance)
+        if self.contours and len(self.contours) > 1:
+            bound1 = self.contours[0][0]
+            bound2 = self.contours[-1][0]
+            max_iterations = 100
+            stage = goal_seek(self.get_storage, bound1, bound2, storage, max_iterations, tolerance)
+        else:
+            stage = self.start_stage
         return stage
 
-    def report_inputs(self, title=True):
-        title = 'Reservoir'
-        col1_title = 'Stage (ft)'
-        col2_title = 'Area (ac)'
+    def report_inputs(self, show_title=True):
         report = Report()
-        if title:
+        if show_title is True:
+            title = 'Reservoir'
             report.add_title(title)
         inputs = self.get_inputs()
         for string in inputs:
             report.add_string_line(string)
         report.add_blank_line()
-        entries = [col1_title, col2_title]
+        entries = ['Stage (ft)', 'Area (ac)']
         report.add_to_columns(entries)
         report.add_columns_line(len(entries))
         for contour in self.contours:
             report.add_to_columns(["{:.3f}".format(contour[0]), "{:.3f}".format(contour[1])])
         report.output()
         return
-
-    def get_inputs(self):
-        inputs = ['Name: ' + property_to_string(self, 'name'),
-                  'Starting Stage (ft): ' + float_to_string(self.start_stage, 3)]
-        return inputs
-
-
-
-
-
-
 
 '''
 def get_discharge(self, links, stage1, stage2=0.0):
