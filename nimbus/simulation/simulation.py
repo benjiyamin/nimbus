@@ -3,6 +3,7 @@ from .result import Result
 from math import ceil
 from nimbus.reports import Report, show_object_list, property_to_string, float_to_string
 import copy
+from time import time
 
 
 class Simulation:
@@ -53,109 +54,91 @@ class Simulation:
                 result_links.append(link)
         return result_nodes, result_links
 
+    def set_stage_and_get_node_result_tuple(self, time_step, curr_time, node):
+        basin_inflow = sum([hydrograph[time_step - 1][1] for hydrograph in node.basin_hydrographs])
+        average_basin_inflow = self.get_average_basin_inflow(node, time_step)                                   # cfs
+        delta_storage = average_basin_inflow * self.interval * 60.0 * 60.0 / 43560.0                            # ac-ft
+        node_storage = node.get_storage(node.curr_stage) + delta_storage                                        # ac-ft
+        node.curr_stage = node.get_stage(node_storage, curr_time)
+        result_tuple = (curr_time, node.curr_stage, basin_inflow, 0.0)
+        return result_tuple
+
+    def set_flow_and_get_link_result_tuple(self, curr_time, link):
+        average_link_flow = self.get_average_link_inflow(link)                                                  # cfs
+        delta_storage = average_link_flow * self.interval * 60.0 * 60.0 / 43560.0                               # ac-ft
+        node1_storage = link.node1.get_storage(link.node1.curr_stage) - delta_storage                           # ac-ft
+        node2_storage = link.node2.get_storage(link.node2.curr_stage) + delta_storage                           # ac-ft
+        link.node1.curr_stage = link.node1.get_stage(node1_storage, curr_time)
+        link.node2.curr_stage = link.node2.get_stage(node2_storage, curr_time)
+        link.curr_flow = link.get_flow(link.node1.curr_stage, link.node2.curr_stage)
+        result_tuple = (curr_time, link.curr_flow, link.node1.curr_stage, link.node2.curr_stage)
+        return result_tuple
+
     def run_and_set_result(self):
         last_time = self.duration
         time_steps = ceil(last_time / self.interval)
         sim_networks = copy.deepcopy(self.networks)
+        start_time = time()
         result_nodes, result_links = self.initialize_and_get_result_lists(sim_networks)
+        print('\nRunning routing simulations...')
         for i in range(1, time_steps):
-            time = i * self.interval
+            curr_time = i * self.interval
             for network in sim_networks:
-
                 for node in network.nodes:
-
-                    basin_inflow = sum([hydrograph[i - 1][1] for hydrograph in node.basin_hydrographs])
-                    average_basin_inflow = self.get_average_basin_inflow(node, i)                               # cfs
-                    delta_storage = average_basin_inflow * self.interval * 60.0 * 60.0 / 43560.0                # ac-ft
-                    node_storage = node.get_storage(node.curr_stage) + delta_storage                            # ac-ft
-                    node.curr_stage = node.get_stage(node_storage, time)
-                    node.results.append((time, node.curr_stage, basin_inflow, 0.0))
-
+                    result_tuple = self.set_stage_and_get_node_result_tuple(i, curr_time, node)
+                    node.results.append(result_tuple)
                 for link in network.links:
-
-                    average_link_flow = self.get_average_link_inflow(link)                                      # cfs
-                    delta_storage = average_link_flow * self.interval * 60.0 * 60.0 / 43560.0                   # ac-ft
-                    node1_storage = link.node1.get_storage(link.node1.curr_stage) - delta_storage               # ac-ft
-                    node2_storage = link.node2.get_storage(link.node2.curr_stage) + delta_storage               # ac-ft
-                    link.node1.curr_stage = link.node1.get_stage(node1_storage, time)
-                    link.node2.curr_stage = link.node2.get_stage(node2_storage, time)
-                    link.curr_flow = link.get_flow(link.node1.curr_stage, link.node2.curr_stage)
-                    link.results.append((time, link.curr_flow, link.node1.curr_stage, link.node2.curr_stage))
-
-                    if link.curr_flow > 0.0:
-
-                        curr_outflow = link.node1.results[-1][3]
-                        curr_outflow += link.curr_flow
-                        last_tuple = link.node1.results.pop()
-                        new_tuple = (last_tuple[0], last_tuple[1], last_tuple[2], curr_outflow)
-                        link.node1.results.append(new_tuple)
-
-                        curr_inflow = link.node2.results[-1][2]
-                        curr_inflow += link.curr_flow
-                        last_tuple = link.node2.results.pop()
-                        new_tuple = (last_tuple[0], last_tuple[1], curr_inflow, last_tuple[3])
-                        link.node2.results.append(new_tuple)
-
-                    elif link.curr_flow < 0.0:
-
-                        curr_outflow = link.node2.results[-1][3]
-                        curr_outflow -= link.curr_flow
-                        last_tuple = link.node2.results.pop()
-                        new_tuple = (last_tuple[0], last_tuple[1], last_tuple[2], curr_outflow)
-                        link.node2.results.append(new_tuple)
-
-                        curr_inflow = link.node1.results[-1][2]
-                        curr_inflow -= link.curr_flow
-                        last_tuple = link.node1.results.pop()
-                        new_tuple = (last_tuple[0], last_tuple[1], curr_inflow, last_tuple[3])
-                        link.node1.results.append(new_tuple)
-
-                    else:
-                        pass
-                '''
-                for node in network.nodes:
-                    node_inflow = 0.0
-                    node_outflow = 0.0
-                    for link in network.links:
-                        if link.node2 is node and link.curr_flow > 0.0:
-                            node_inflow += link.curr_flow
-                        elif link.node1 is node and link.curr_flow < 0.0:
-                            node_inflow += link.curr_flow
-                        elif link.node2 is node and link.curr_flow < 0.0:
-                            node_outflow += link.curr_flow
-                        elif link.node1 is node and link.curr_flow > 0.0:
-                            node_outflow += link.curr_flow
-                        else:
-                            pass
-                    node_inflow += sum([hydrograph[i][1] for hydrograph in node.basin_hydrographs])
-                    node.results.append((time, node.curr_stage, node_inflow, node_outflow))
-                '''
+                    result_tuple = self.set_flow_and_get_link_result_tuple(curr_time, link)
+                    link.results.append(result_tuple)
+                    self.adjust_link_flows(link)
+            prog_hash = 60 * i // time_steps + 1
+            print("[{}{}] {}%".format('#' * prog_hash, ' ' * (60 - prog_hash), i * 100 // time_steps + 1), end="\r")
+        print("\nSuccess: Routing simulations complete!")
+        print("\nTotal simulation time: {:.2f} seconds.\n".format(time() - start_time))
         self.result = Result(result_nodes, result_links)
         return
 
-    def get_average_basin_inflow(self, node, time_step):
+    @staticmethod
+    def get_average_basin_inflow(node, time_step):
         basin_inflow1 = sum([hydrograph[time_step - 1][1] for hydrograph in node.basin_hydrographs])
         basin_inflow2 = sum([hydrograph[time_step][1] for hydrograph in node.basin_hydrographs])
         basin_inflow = (basin_inflow1 + basin_inflow2) / 2.0
         return basin_inflow
 
-    def get_average_link_inflow(self, link):
+    @staticmethod
+    def get_average_link_inflow(link):
         link_flow1 = link.curr_flow
         link_flow2 = link.get_flow(link.node1.curr_stage, link.node2.curr_stage)
         link_flow = (link_flow1 + link_flow2) / 2.0
         return link_flow
 
-
-    '''
-    def write(self, result):
-        result.write(self.filepath)
+    @staticmethod
+    def adjust_link_flows(link):
+        if link.curr_flow > 0.0:
+            curr_outflow = link.node1.results[-1][3]
+            curr_outflow += link.curr_flow
+            last_tuple = link.node1.results.pop()
+            new_tuple = (last_tuple[0], last_tuple[1], last_tuple[2], curr_outflow)
+            link.node1.results.append(new_tuple)
+            curr_inflow = link.node2.results[-1][2]
+            curr_inflow += link.curr_flow
+            last_tuple = link.node2.results.pop()
+            new_tuple = (last_tuple[0], last_tuple[1], curr_inflow, last_tuple[3])
+            link.node2.results.append(new_tuple)
+        elif link.curr_flow < 0.0:
+            curr_outflow = link.node2.results[-1][3]
+            curr_outflow -= link.curr_flow
+            last_tuple = link.node2.results.pop()
+            new_tuple = (last_tuple[0], last_tuple[1], last_tuple[2], curr_outflow)
+            link.node2.results.append(new_tuple)
+            curr_inflow = link.node1.results[-1][2]
+            curr_inflow -= link.curr_flow
+            last_tuple = link.node1.results.pop()
+            new_tuple = (last_tuple[0], last_tuple[1], curr_inflow, last_tuple[3])
+            link.node1.results.append(new_tuple)
+        else:
+            pass
         return
-
-    def run_and_write(self):
-        result = self.run_and_set_result()
-        self.write(result)
-        return
-    '''
 
     def report_inputs(self, title=True):
         title = 'Simulation'
@@ -208,3 +191,14 @@ class Simulation:
                 name += ".nsf"
         self.filepath = directory + name
         return
+
+    '''
+    def write(self, result):
+        result.write(self.filepath)
+        return
+
+    def run_and_write(self):
+        result = self.run_and_set_result()
+        self.write(result)
+        return
+    '''

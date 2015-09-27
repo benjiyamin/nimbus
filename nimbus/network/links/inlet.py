@@ -17,9 +17,7 @@ class Inlet(Pipe):
         return
 
     def show_weirs(self):
-        title = 'Weir'
-        object_list = self.weirs
-        show_object_list(title, object_list)
+        show_object_list('Weir', self.weirs)
         return
 
     def get_flow(self, stage1, stage2):
@@ -44,7 +42,7 @@ class Inlet(Pipe):
         report.output()
         for i, weir in enumerate(self.weirs):
             report.clear_lines()
-            report.add_string_line('Weir %s of %s' % (i + 1, len(self.weirs)))
+            report.add_string_line('- Weir %s of %s -' % (i + 1, len(self.weirs)))
             report.output()
             weir.report_inputs(show_title=False)
             report.add_blank_line()

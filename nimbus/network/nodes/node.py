@@ -43,9 +43,7 @@ class Node:
         return storage
 
     def show_basins(self):
-        title = 'Basins'
-        object_list = self.basins
-        show_object_list(title, object_list)
+        show_object_list('Basins', self.basins)
         return
 
     def get_inputs(self):

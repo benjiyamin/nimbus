@@ -1,8 +1,7 @@
 
-from math import ceil
 from nimbus.network.nodes.node import Node
 from nimbus.math import interpolate_from_table, goal_seek
-from nimbus.reports import Report, float_to_string, property_to_string
+from nimbus.reports import Report, show_object_list
 
 
 class Reservoir(Node):
@@ -14,20 +13,26 @@ class Reservoir(Node):
             self.contours = contours
         super(Reservoir, self).__init__(name, start_stage, basins)
 
-    def order_contours(self):
-        self.contours = sorted(self.contours, key=lambda contour: contour[0])
-        return
-
     def create_contour(self, elevation, area):
         new_contour = (elevation, area)
         self.contours.append(new_contour)
         self.order_contours()
+        self.show_contours()
         return
 
     def delete_contour(self, index):
         contour = self.contours[index]
         self.contours.remove(contour)
+        self.show_contours()
         del contour
+        return
+
+    def order_contours(self):
+        self.contours = sorted(self.contours, key=lambda contour: contour[0])
+        return
+
+    def show_contours(self):
+        show_object_list('Contours', self.contours)
         return
 
     def get_area(self, elevation):
@@ -85,61 +90,3 @@ class Reservoir(Node):
             report.add_to_columns(["{:.3f}".format(contour[0]), "{:.3f}".format(contour[1])])
         report.output()
         return
-
-'''
-def get_discharge(self, links, stage1, stage2=0.0):
-    discharge = 0.0
-    for link in links:
-        if link.node1 is self:
-            discharge += link.get_flow(stage1, stage2)
-    return discharge
-
-def get_discharge_table(self, links, start_stage, time_step, duration):
-    len_time_steps = ceil(duration / time_step) + 1
-    stage = start_stage
-    discharge_table = []
-    discharge2 = 0.0  # cfs
-    for t in range(len_time_steps):
-        discharge1 = discharge2
-        if t > 0:
-            discharge2 = self.get_discharge(links, stage)
-        time = t * time_step
-        storage = self.get_storage(stage)  # ac-ft
-        discharge = (discharge1 + discharge2) / 2.0
-        discharged_volume = discharge * time_step * 3600.0 / 43560.0  # ac-ft
-        new_storage = storage - discharged_volume
-        stage = self.get_stage(new_storage)
-        new_tuple = (time, stage)
-        discharge_table.append(new_tuple)
-    return discharge_table
-
-def get_storage_indicator(self, links, time_step, stage1, stage2=0.0):
-    discharge = self.get_discharge(links, stage1, stage2)
-    storage = self.get_storage(stage1)
-    storage_indicator = storage / time_step + discharge / 2.0
-    return storage_indicator
-'''
-
-'''
-def get_storage_indicator_table(self, network, stage_step, time_step):
-    min_elevation = self.contours[0][0]
-    # max_elevation = self.contours[len(self.contours) - 1][0]
-    max_elevation = self.contours[-1][0]
-    stage_steps = ceil((max_elevation - min_elevation) / stage_step)
-    storage_indicator_table = []
-    for s in range(stage_steps):
-        stage = s * (min_elevation + stage_step)
-        discharge = 0.0
-        for link in network.links:
-            if link.node1 is self:
-                if link.get_flow(stage, stage - link.get_friction_loss()) > 0.0:
-                    discharge += link.get_flow(stage, stage - link.get_friction_loss())
-            elif link.node2 is self:
-                if link.get_flow(stage, stage + link.get_friction_loss()) < 0.0:
-                    discharge += link.get_flow(stage + link.get_friction_loss(), stage)
-        storage = self.get_storage(stage)
-        storage_indicator = storage / time_step + discharge / 2.0
-        new_tuple = (stage, storage_indicator)
-        storage_indicator_table.append(new_tuple)
-    return storage_indicator_table
-'''

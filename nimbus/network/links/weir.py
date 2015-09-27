@@ -2,6 +2,7 @@ from math import pow, sqrt
 
 from .link import Link
 from nimbus.reports import Report, property_to_string, float_to_string
+from nimbus.network.shapes import Rectangle
 
 
 class Weir(Link):
@@ -33,7 +34,7 @@ class Weir(Link):
                 flow = self.orif_coef * area * sqrt(2.0 * 32.2 * eff_head)
             elif stage1 > self.invert:                                          # weir flow
                 eff_head = stage1 - self.invert
-                flow = self.weir_coef * self.shape.span * pow(eff_head, 1.5)
+                flow = self.weir_coef * self.shape.span / 12.0 * pow(eff_head, 1.5)
                 if stage2 > self.invert:                                        # submerged flow
                     flow *= 1.0 - pow(pow(stage2 / stage1, 1.5), 0.385)
             else:
@@ -48,7 +49,7 @@ class Weir(Link):
                 flow = -self.orif_coef * area * sqrt(2.0 * 32.2 * eff_head)
             elif stage2 > self.invert:                                          # weir flow
                 eff_head = stage2 - self.invert
-                flow = -self.weir_coef * self.shape.span * pow(eff_head, 1.5)
+                flow = -self.weir_coef * self.shape.span / 12.0 * pow(eff_head, 1.5)
                 if stage1 > self.invert:                                        # submerged flow
                     flow *= 1.0 - pow(pow(stage1 / stage2, 1.5), 0.385)
             else:

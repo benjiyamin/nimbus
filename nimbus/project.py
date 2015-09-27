@@ -17,80 +17,54 @@ class Project:
         self.hydrographs = []
         self.distributions = []
 
-    def clear_all(self):
-        """Remove all objects from the project lists and delete them."""
-        self.clear_networks()
-        self.clear_hydrographs()
-        self.clear_simulations()
-        self.clear_distributions()
-        return
-
-    @staticmethod
-    def delete_from_list(index, _list):
-        thing = _list[index]
-        _list.remove(thing)
-        del thing
-        return
-    
-    @staticmethod
-    def copy_from_list(index, _list):
-        thing = _list[index]
-        copy_thing = copy.deepcopy(thing)
-        _list.append(copy_thing)
-        return
-
     def create_network(self, *args, **kwargs):
-        """Create a network, add it to the network list, and return the object."""
+        """Create a network and add it to the network list."""
         new_network = Network(*args, **kwargs)
-        self.networks.append(new_network)
-        print('Success: New network created.')
+        append_to_list_and_print(new_network, self.networks)
         return
 
     def delete_network(self, index):
         """Remove the network at the specified index from the network list and delete it."""
-        self.delete_from_list(index, self.networks)
-        print("Success: Network at index %s has been deleted." % index)
+        delete_from_list_and_print(index, self.networks)
         return
     
     def copy_network(self, index):
-        """Create a copy of the network at the specified index from the network list and append it to the list"""
-        self.copy_from_list(index, self.networks)
+        """Create a copy of the network at the specified index 
+        from the network list and append it to the list"""
+        copy_from_list_and_print(index, self.networks)
         return
     
     def clear_networks(self):
-        """Remove all network from the network list and delete them."""
-        for network in self.networks:
-            self.delete_network(network)
-        print("Success: All Network objects have been deleted.")
+        """Remove all networks from the network list and delete them."""
+        clear_list_and_print(self.networks, self.delete_network)
         return
     
     def create_simulation(self, *args, **kwargs):
         """Create a simulation, add it to the simulation list, and return the object."""
         new_simulation = Simulation(*args, **kwargs)
-        self.simulations.append(new_simulation)
+        append_to_list_and_print(new_simulation, self.simulations)
         return
 
     def delete_simulation(self, index):
         """Remove the simulation at the specified index from the simulation list and delete it."""
-        self.delete_from_list(index, self.simulations)
+        delete_from_list_and_print(index, self.simulations)
         return
     
     def copy_simulation(self, index):
-        """Create a copy of the simulation at the specified index from the simulation list and append it to the list"""
-        self.copy_from_list(index, self.simulations)
+        """Create a copy of the simulation at the specified index 
+        from the simulation list and append it to the list"""
+        copy_from_list_and_print(index, self.simulations)
         return
     
     def clear_simulations(self):
         """Remove all simulation from the simulation list and delete them."""
-        for simulation in self.simulations:
-            self.delete_simulation(simulation)
-        print("Success: All Simulation objects have been deleted.")
+        clear_list_and_print(self.simulations, self.delete_simulation)
         return
     
     def create_hydrograph(self, *args, **kwargs):
         """Create a hydrograph, add it to the hydrograph list, and return the object."""
         new_hydrograph = UnitHydrograph(*args, **kwargs)
-        self.hydrographs.append(new_hydrograph)
+        append_to_list_and_print(new_hydrograph, self.hydrographs)
         return
 
     def add_hydrograph(self, hydrograph):
@@ -100,80 +74,93 @@ class Project:
 
     def delete_hydrograph(self, index):
         """Remove the hydrograph at the specified index from the hydrograph list and delete it."""
-        self.delete_from_list(index, self.hydrographs)
+        delete_from_list_and_print(index, self.hydrographs)
         return
     
     def copy_hydrograph(self, index):
-        """Create a copy of the hydrograph at the specified index from the hydrograph list and append it to the list"""
-        self.copy_from_list(index, self.hydrographs)
+        """Create a copy of the hydrograph at the specified index 
+        from the hydrograph list and append it to the list"""
+        copy_from_list_and_print(index, self.hydrographs)
         return
 
     def clear_hydrographs(self):
         """Remove all hydrograph from the hydrograph list and delete them."""
-        for hydrograph in self.hydrographs:
-            self.delete_hydrograph(hydrograph)
-        print("Success: All Hydrograph objects have been deleted.")
+        clear_list_and_print(self.hydrographs, self.delete_hydrograph)
         return
     
     def create_distribution(self, *args, **kwargs):
         """Create a distribution, add it to the distribution list, and return the object."""
         new_distribution = RainfallDistribution(*args, **kwargs)
-        self.distributions.append(new_distribution)
+        append_to_list_and_print(new_distribution, self.distributions)
         return
 
     def delete_distribution(self, index):
         """Remove the distribution at the specified index from the distribution list and delete it."""
-        self.delete_from_list(index, self.distributions)
+        delete_from_list_and_print(index, self.distributions)
         return
     
     def copy_distribution(self, index):
-        """Create a copy of the distribution at the specified index from the distribution list and append it to the list"""
-        self.copy_from_list(index, self.distributions)
+        """Create a copy of the distribution at the specified index 
+        from the distribution list and append it to the list"""
+        copy_from_list_and_print(index, self.distributions)
         return
     
     def clear_distributions(self):
         """Remove all distribution from the distribution list and delete them."""
-        for distribution in self.distributions:
-            self.delete_distribution(distribution)
-        print("Success: All Distribution objects have been deleted.")
+        clear_list_and_print(self.distributions, self.delete_distribution)
+        return
+
+    def clear_all(self):
+        """Remove all objects from the project lists and delete them."""
+        self.clear_networks()
+        self.clear_hydrographs()
+        self.clear_simulations()
+        self.clear_distributions()
         return
 
     def show_networks(self):
-        title = 'Networks'
-        object_list = self.networks
-        show_object_list(title, object_list)
+        show_object_list('Networks', self.networks)
         return
 
     def show_hydrographs(self):
-        title = 'Hydrographs'
-        object_list = self.hydrographs
-        show_object_list(title, object_list)
+        show_object_list('Hydrographs', self.hydrographs)
         return
 
     def show_simulations(self):
-        title = 'Simulations'
-        object_list = self.simulations
-        show_object_list(title, object_list)
+        show_object_list('Simulations', self.simulations)
         return
 
     def show_distributions(self):
-        title = 'Distributions'
-        object_list = self.distributions
-        show_object_list(title, object_list)
+        show_object_list('Distributions', self.distributions)
         return
 
 
-'''
-@staticmethod
-def report_object_list(title, object_list):
-    report = Report()
-    report.add_title(title)
-    for i, thing in enumerate(object_list):
-        if not thing.name:
-            name_string = 'Unnamed'
-        else:
-            name_string = thing.name
-        report.add_string_line('%s: %s' % (i, name_string))
-    report.output()
+def clear_list_and_print(_list, delete_function):
+    for i, thing in enumerate(_list):
+        delete_function(i)
     return
-'''
+
+
+def delete_from_list_and_print(index, _list):
+    thing = _list[index]
+    _list.remove(thing)
+    class_name = thing.__class__.__name__
+    del thing
+    print("\nSuccess: %s at index %s has been deleted.\n" % (class_name,  index))
+    return
+
+
+def copy_from_list_and_print(index, _list):
+    thing = _list[index]
+    copy_thing = copy.deepcopy(thing)
+    class_name = copy_thing.__class__.__name__
+    _list.append(copy_thing)
+    print("\nSuccess: %s at index %s has been copied and appended to the list.\n" % (class_name,  index))
+    return
+
+
+def append_to_list_and_print(_object, _list):
+    _list.append(_object)
+    class_name = _object.__class__.__name__
+    print('\nSuccess: New %s created.\n' % class_name)
+    return

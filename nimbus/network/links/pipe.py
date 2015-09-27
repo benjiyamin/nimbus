@@ -97,7 +97,6 @@ class Pipe(Link):
         else:
             a = (upper_el - lower_el) * 2.0 * 32.2
             b = 2.0 * 32.2 / pow(1.486, 2.0) * pow(self.mannings, 2.0) * self.length / pow(hyd_radius, 4.0 / 3.0)
-            #velocity = sqrt(a / (1 + b))
             velocity = sqrt(a / b)
         return velocity
 
@@ -118,9 +117,7 @@ class Pipe(Link):
             shape_span = float_to_string(self.shape.span, 3)
             shape_rise = float_to_string(self.shape.rise, 3)
         else:
-            shape_type = 'Undefined'
-            shape_span = 'Undefined'
-            shape_rise = 'Undefined'
+            shape_type = shape_span = shape_rise = 'Undefined'
         inputs = ['Name: ' + property_to_string(self, 'name'),
                   'Node 1: ' + property_to_string(self.node1, 'name'),
                   'Node 2: ' + property_to_string(self.node2, 'name'),

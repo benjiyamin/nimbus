@@ -1,8 +1,7 @@
-from math import ceil
 
 from nimbus.network.nodes.node import Node
 from nimbus.math import interpolate_from_table
-from nimbus.reports import Report, float_to_string, property_to_string
+from nimbus.reports import Report, show_object_list
 
 
 class Boundary(Node):
@@ -26,12 +25,18 @@ class Boundary(Node):
         new_time_stage = (time, stage)
         self.time_stages.append(new_time_stage)
         self.order_time_stages()
+        self.show_time_stages()
         return
 
     def delete_time_stage(self, index):
         time_stage = self.time_stages[index]
         self.time_stages.remove(time_stage)
         del time_stage
+        self.show_time_stages()
+        return
+
+    def show_time_stages(self):
+        show_object_list('Time-Stages', self.time_stages)
         return
 
     def report_inputs(self, show_title=True):

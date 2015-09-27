@@ -4,7 +4,6 @@ class Report:
 
     def __init__(self):
         self.lines = []
-        self.add_blank_line()
 
     def add_title(self, title, length=50, offset=4):
         a = '=' * length
@@ -31,13 +30,6 @@ class Report:
         self.lines = []
         return
 
-    '''
-    def add_two_columns(self, entry1, entry2, col_length=15):
-        string = (('%' + str(col_length) + 's') % entry1) + ' ' + (('%' + str(col_length) + 's') % entry2)
-        self.lines.append(string)
-        return
-    '''
-
     def add_to_columns(self, entries, col_length=15):
         string = ''
         for i, entry in enumerate(entries):
@@ -53,23 +45,25 @@ class Report:
         return
 
     def output(self):
-        self.add_blank_line()
         for line in self.lines:
             print(line)
+        self.clear_lines()
+        return
 
 
 def show_object_list(title, object_list, show_class=False):
     report = Report()
-    report.add_title(title)
+    if title:
+        report.add_title(title)
     for i, thing in enumerate(object_list):
         if not thing.name:
             name_string = 'Unnamed'
         else:
             name_string = thing.name
-        if show_class is False:
-            report.add_string_line('%s: %s' % (i, name_string))
-        else:
-            report.add_string_line('%s: %s (%s)' % (i, name_string, thing.__class__.__name__))
+        string_list = [i, name_string]
+        if show_class is True:
+            string_list.append(thing.__class__.__name__)
+        report.add_to_columns(string_list)
     report.output()
     return
 
