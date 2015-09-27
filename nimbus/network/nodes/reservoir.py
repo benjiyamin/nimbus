@@ -1,7 +1,7 @@
 
 from nimbus.network.nodes.node import Node
 from nimbus.math import interpolate_from_table, goal_seek
-from nimbus.reports import Report, show_object_list
+from nimbus.reports import Report, show_objects_in_list
 
 
 class Reservoir(Node):
@@ -31,9 +31,11 @@ class Reservoir(Node):
         self.contours = sorted(self.contours, key=lambda contour: contour[0])
         return
 
+    '''
     def show_contours(self):
-        show_object_list('Contours', self.contours)
+        show_objects_in_list('Contours', self.contours)
         return
+    '''
 
     def get_area(self, elevation):
         if self.contours and len(self.contours) > 1:
@@ -76,6 +78,7 @@ class Reservoir(Node):
 
     def report_inputs(self, show_title=True):
         report = Report()
+        report.add_blank_line()
         if show_title is True:
             title = 'Reservoir'
             report.add_title(title)
@@ -88,5 +91,6 @@ class Reservoir(Node):
         report.add_columns_line(len(entries))
         for contour in self.contours:
             report.add_to_columns(["{:.3f}".format(contour[0]), "{:.3f}".format(contour[1])])
+        report.add_blank_line()
         report.output()
         return

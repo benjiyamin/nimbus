@@ -1,7 +1,7 @@
 
 from .weir import Weir
 from .pipe import Pipe
-from nimbus.reports import Report, show_object_list
+from nimbus.reports import Report, show_objects_in_list
 
 
 class Inlet(Pipe):
@@ -17,7 +17,7 @@ class Inlet(Pipe):
         return
 
     def show_weirs(self):
-        show_object_list('Weir', self.weirs)
+        show_objects_in_list('Weir', self.weirs)
         return
 
     def get_flow(self, stage1, stage2):

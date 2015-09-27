@@ -51,6 +51,7 @@ class Report:
         return
 
 
+'''
 def show_object_list(title, object_list, show_class=False):
     report = Report()
     if title:
@@ -66,6 +67,47 @@ def show_object_list(title, object_list, show_class=False):
         report.add_to_columns(string_list)
     report.output()
     return
+'''
+
+
+def show_objects_in_list(title, object_list, show_class=False):
+    report = Report()
+    report.add_blank_line()
+    if title:
+        report.add_title(title)
+    string_list = ['Index', 'Name']
+    if show_class is True:
+        string_list.append('Class')
+    report.add_to_columns(string_list)
+    report.add_break_line()
+    for i, thing in enumerate(object_list):
+        if not thing.name:
+            name_string = 'Unnamed'
+        else:
+            name_string = thing.name
+        string_list = [i, name_string]
+        if show_class is True:
+            string_list.append(thing.__class__.__name__)
+        report.add_to_columns(string_list)
+    report.add_blank_line()
+    report.output()
+    return
+
+'''
+def show_couples_in_list(title, col1_name, col2_name, couple_list):
+    report = Report()
+    report.add_blank_line()
+    if title:
+        report.add_title(title)
+    report.add_to_columns(['Index', col1_name, col2_name])
+    report.add_break_line()
+    for i, couple in enumerate(couple_list):
+        string_list = [i, couple[0], couple[1]]
+        report.add_to_columns(string_list)
+    report.add_blank_line()
+    report.output()
+    return
+'''
 
 
 def float_to_string(number, decimals):

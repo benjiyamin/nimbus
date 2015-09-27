@@ -1,7 +1,8 @@
 
 from nimbus.network.nodes import Node, Reservoir, Boundary
 from nimbus.network.links import Pipe, Weir, Inlet
-from nimbus.reports import Report, show_object_list
+from nimbus.reports import Report, show_objects_in_list
+from nimbus.data import append_to_list_and_print, delete_from_list_and_print, copy_from_list_and_print
 import copy
 
 
@@ -70,11 +71,11 @@ class Network:
         return
 
     def show_nodes(self):
-        self.show_objects_in_list(self.nodes)
+        show_objects_in_list('Nodes', self.nodes, True)
         return
 
     def show_links(self):
-        self.show_objects_in_list(self.links)
+        show_objects_in_list('Links', self.links, True)
         return
 
     def report_node_inputs(self):
@@ -93,6 +94,7 @@ class Network:
         self.report_object_list_inputs('Basins', basin_list)
         return
 
+    '''
     @staticmethod
     def show_objects_in_list(_list):
         report = Report()
@@ -103,45 +105,17 @@ class Network:
         show_object_list(None, _list, show_class=True)
         report.add_blank_line()
         return
+    '''
 
     @staticmethod
     def report_object_list_inputs(title, object_list):
         report = Report()
+        report.add_blank_line()
         report.add_title(title)
         report.output()
         for thing in object_list:
             thing.report_inputs(show_title=False)
             report.add_break_line()
+            report.add_blank_line()
             report.output()
         return
-
-
-def clear_list_and_print(_list, delete_function):
-    for i, thing in enumerate(_list):
-        delete_function(i)
-    return
-
-
-def delete_from_list_and_print(index, _list):
-    thing = _list[index]
-    _list.remove(thing)
-    class_name = thing.__class__.__name__
-    del thing
-    print("\nSuccess: %s at index %s has been deleted.\n" % (class_name,  index))
-    return
-
-
-def copy_from_list_and_print(index, _list):
-    thing = _list[index]
-    copy_thing = copy.deepcopy(thing)
-    class_name = copy_thing.__class__.__name__
-    _list.append(copy_thing)
-    print("\nSuccess: %s at index %s has been copied and appended to the list.\n" % (class_name,  index))
-    return
-
-
-def append_to_list_and_print(_object, _list):
-    _list.append(_object)
-    class_name = _object.__class__.__name__
-    print('\nSuccess: New %s created.\n' % class_name)
-    return

@@ -1,7 +1,7 @@
 
 from .result import Result
 from math import ceil
-from nimbus.reports import Report, show_object_list, property_to_string, float_to_string
+from nimbus.reports import Report, show_objects_in_list, property_to_string, float_to_string
 import copy
 from time import time
 
@@ -161,9 +161,7 @@ class Simulation:
         return inputs
 
     def show_networks(self):
-        title = 'Networks'
-        object_list = self.networks
-        show_object_list(title, object_list)
+        show_objects_in_list('Networks', self.networks)
         return
 
     def add_network(self, network):

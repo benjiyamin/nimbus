@@ -1,7 +1,7 @@
 
 from nimbus.network.nodes.node import Node
 from nimbus.math import interpolate_from_table
-from nimbus.reports import Report, show_object_list
+from nimbus.reports import Report, show_objects_in_list
 
 
 class Boundary(Node):
@@ -36,11 +36,12 @@ class Boundary(Node):
         return
 
     def show_time_stages(self):
-        show_object_list('Time-Stages', self.time_stages)
+        show_objects_in_list('Time-Stages', self.time_stages)
         return
 
     def report_inputs(self, show_title=True):
         report = Report()
+        report.add_blank_line()
         if show_title is True:
             title = 'Boundary'
             report.add_title(title)
@@ -53,5 +54,6 @@ class Boundary(Node):
         report.add_columns_line(len(entries))
         for time_stage in self.time_stages:
             report.add_to_columns(["{:.3f}".format(time_stage[0]), "{:.3f}".format(time_stage[1])])
+        report.add_blank_line()
         report.output()
         return

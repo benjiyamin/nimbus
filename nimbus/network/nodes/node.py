@@ -1,7 +1,7 @@
 
 import copy
 from nimbus.hydrology import Basin
-from nimbus.reports import show_object_list, property_to_string, float_to_string
+from nimbus.reports import property_to_string, float_to_string, show_objects_in_list
 
 
 class Node:
@@ -43,7 +43,7 @@ class Node:
         return storage
 
     def show_basins(self):
-        show_object_list('Basins', self.basins)
+        show_objects_in_list('Basins', self.basins)
         return
 
     def get_inputs(self):
