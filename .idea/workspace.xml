@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="55b85b42-c038-4e7f-aaeb-01138bb2eb45" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nimbus/data/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/nimbus/data/data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/network/nodes/boundary.py" afterPath="$PROJECT_DIR$/nimbus/network/nodes/boundary.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/network/links/inlet.py" afterPath="$PROJECT_DIR$/nimbus/network/links/inlet.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/network/network.py" afterPath="$PROJECT_DIR$/nimbus/network/network.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/network/nodes/node.py" afterPath="$PROJECT_DIR$/nimbus/network/nodes/node.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/project.py" afterPath="$PROJECT_DIR$/nimbus/project.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/reports/report.py" afterPath="$PROJECT_DIR$/nimbus/reports/report.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/network/nodes/reservoir.py" afterPath="$PROJECT_DIR$/nimbus/network/nodes/reservoir.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/simulation/simulation.py" afterPath="$PROJECT_DIR$/nimbus/simulation/simulation.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nimbus/network/links/weir.py" afterPath="$PROJECT_DIR$/nimbus/network/links/weir.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="nimbus.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -82,15 +71,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="project.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="project.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nimbus/project.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8595944">
-              <caret line="138" column="35" selection-start-line="138" selection-start-column="35" selection-end-line="138" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="137" column="33" selection-start-line="137" selection-start-column="33" selection-end-line="137" selection-end-column="33" />
               <folding>
                 <element signature="e#1#12#0" expanded="true" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider editor-type-id="MultiMarkdownFxPreviewEditor">
+            <state />
+          </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.14754099">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="MultiMarkdownFxHtmlEditor">
+            <state />
           </provider>
         </entry>
       </file>
@@ -131,7 +139,6 @@
         <option value="$PROJECT_DIR$/sandbox.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/LICENSE.md" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/nimbus/reports/models/floatfield.py" />
         <option value="$PROJECT_DIR$/nimbus/reports/fields/string.py" />
         <option value="$PROJECT_DIR$/nimbus/reports/fields/table.py" />
@@ -179,6 +186,7 @@
         <option value="$PROJECT_DIR$/nimbus/network/nodes/reservoir.py" />
         <option value="$PROJECT_DIR$/nimbus/network/nodes/boundary.py" />
         <option value="$PROJECT_DIR$/nimbus/project.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -190,8 +198,7 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1366" />
-    <option name="y" value="24" />
+    <option name="y" value="-744" />
     <option name="width" value="1366" />
     <option name="height" value="744" />
   </component>
@@ -904,7 +911,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1366" y="24" width="1366" height="744" extended-state="6" />
+    <frame x="0" y="-744" width="1366" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.15841584" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1080,13 +1087,6 @@
       </provider>
       <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.05154639">
-          <caret line="2" column="37" selection-start-line="2" selection-start-column="37" selection-end-line="2" selection-end-column="37" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
@@ -1375,12 +1375,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/nimbus/project.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8595944">
-          <caret line="138" column="35" selection-start-line="138" selection-start-column="35" selection-end-line="138" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="137" column="33" selection-start-line="137" selection-start-column="33" selection-end-line="137" selection-end-column="33" />
           <folding>
             <element signature="e#1#12#0" expanded="true" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MultiMarkdownFxPreviewEditor">
+        <state />
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14754099">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MultiMarkdownFxHtmlEditor">
+        <state />
       </provider>
     </entry>
   </component>
