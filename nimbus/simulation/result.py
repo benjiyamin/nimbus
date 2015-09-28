@@ -11,6 +11,7 @@ class Result:
 
     def report_node_maximums(self):
         report = Report()
+        report.add_blank_line()
         report.add_to_columns(['Name', 'Max',   'Max',   'Max',    'Max',    'Max',     'Max'])
         report.add_to_columns(['',     'Stage', 'Stage', 'Inflow', 'Inflow', 'Outflow', 'Outflow'])
         report.add_to_columns(['',     'Time',  '',      'Time',   '',       'Time',    ''])
@@ -30,11 +31,13 @@ class Result:
                                    float_to_string(max_inflow,       3),
                                    float_to_string(max_outflow_time, 2),
                                    float_to_string(max_outflow,      3)])
+        report.add_blank_line()
         report.output()
         return
 
     def report_link_maximums(self):
         report = Report()
+        report.add_blank_line()
         report.add_to_columns(['Name', 'Max',  'Max',   'Max',     'Max',     'Max',     'Max'])
         report.add_to_columns(['',     'Flow', 'Flow',  'Stage 1', 'Stage 1', 'Stage 2', 'Stage 2'])
         report.add_to_columns(['',     'Time', '',      'Time',    '',        'Time',    ''])
@@ -54,6 +57,7 @@ class Result:
                                    float_to_string(max_stage1,      3),
                                    float_to_string(max_stage2_time, 2),
                                    float_to_string(max_stage2,      3)])
+        report.add_blank_line()
         report.output()
         return
 
