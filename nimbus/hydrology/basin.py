@@ -1,6 +1,7 @@
 
 from math import pow
 from nimbus.reports import Report, property_to_string, float_to_string
+from nimbus.simulation import ProgressBar
 
 
 class Basin:
@@ -49,7 +50,10 @@ class Basin:
         rir_length = len(reverse_incremental_runoff)
         composite_length = fh_length + rir_length
         composite_hydrograph = []
-        print('\nCalculating %s runoff...' % self.name)
+        start_message = 'Calculating %s runoff...' % self.name
+        end_message = "Success: %s runoff calculations complete!" % self.name
+        progress_bar = ProgressBar(60, start_message, end_message)
+        progress_bar.begin()
         for i in range(1, composite_length + 1):
             if i < rir_length + 1:
                 rir_synth = reverse_incremental_runoff[(rir_length - i):rir_length]
@@ -66,9 +70,8 @@ class Basin:
             time = time_step * (i - 1)
             new_tuple = (time, composite_runoff)
             composite_hydrograph.append(new_tuple)
-            progress_hash = 60 * i // composite_length
-            print("[{}{}] {}%".format('#' * progress_hash, ' ' * (60 - progress_hash), i * 100 // composite_length), end="\r")
-        print("\nSuccess: %s runoff calculations complete!" % self.name)
+            progress_bar.update(i, composite_length)
+        progress_bar.complete()
         return composite_hydrograph
 
     def get_runoff(self, rainfall):

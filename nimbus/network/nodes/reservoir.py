@@ -14,6 +14,7 @@ class Reservoir(Node):
         super(Reservoir, self).__init__(name, start_stage, basins)
 
     def create_contour(self, elevation, area):
+        """Create a contour, add it to the contour list, and order the list by elevation."""
         new_contour = (elevation, area)
         self.contours.append(new_contour)
         self.order_contours()
@@ -21,6 +22,7 @@ class Reservoir(Node):
         return
 
     def delete_contour(self, index):
+        """Remove the contour at the specified index from the contour list and delete it."""
         contour = self.contours[index]
         self.contours.remove(contour)
         self.show_contours()
@@ -28,14 +30,34 @@ class Reservoir(Node):
         return
 
     def order_contours(self):
+        """Order the contour list by time."""
         self.contours = sorted(self.contours, key=lambda contour: contour[0])
         return
 
-    '''
     def show_contours(self):
+        """Display all contours stored in the reservoir's contour list."""
         show_objects_in_list('Contours', self.contours)
         return
-    '''
+
+    def report_inputs(self, show_title=True):
+        """Report all current inputs of the reservoir"""
+        report = Report()
+        report.add_blank_line()
+        if show_title is True:
+            title = 'Reservoir'
+            report.add_title(title)
+        inputs = self.get_inputs()
+        for string in inputs:
+            report.add_string_line(string)
+        report.add_blank_line()
+        entries = ['Stage (ft)', 'Area (ac)']
+        report.add_to_columns(entries)
+        report.add_columns_line(len(entries))
+        for contour in self.contours:
+            report.add_to_columns(["{:.3f}".format(contour[0]), "{:.3f}".format(contour[1])])
+        report.add_blank_line()
+        report.output()
+        return
 
     def get_area(self, elevation):
         if self.contours and len(self.contours) > 1:
@@ -75,22 +97,3 @@ class Reservoir(Node):
         else:
             stage = self.start_stage
         return stage
-
-    def report_inputs(self, show_title=True):
-        report = Report()
-        report.add_blank_line()
-        if show_title is True:
-            title = 'Reservoir'
-            report.add_title(title)
-        inputs = self.get_inputs()
-        for string in inputs:
-            report.add_string_line(string)
-        report.add_blank_line()
-        entries = ['Stage (ft)', 'Area (ac)']
-        report.add_to_columns(entries)
-        report.add_columns_line(len(entries))
-        for contour in self.contours:
-            report.add_to_columns(["{:.3f}".format(contour[0]), "{:.3f}".format(contour[1])])
-        report.add_blank_line()
-        report.output()
-        return

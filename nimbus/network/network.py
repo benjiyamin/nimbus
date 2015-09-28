@@ -1,9 +1,8 @@
 
 from nimbus.network.nodes import Node, Reservoir, Boundary
 from nimbus.network.links import Pipe, Weir, Inlet
-from nimbus.reports import Report, show_objects_in_list
+from nimbus.reports import show_objects_in_list, report_object_list_inputs
 from nimbus.data import append_to_list_and_print, delete_from_list_and_print, copy_from_list_and_print
-import copy
 
 
 class Network:
@@ -71,51 +70,31 @@ class Network:
         return
 
     def show_nodes(self):
+        """Display all nodes stored in the network's node list."""
         show_objects_in_list('Nodes', self.nodes, True)
         return
 
     def show_links(self):
+        """Display all links stored in the network's link list."""
         show_objects_in_list('Links', self.links, True)
         return
 
     def report_node_inputs(self):
-        self.report_object_list_inputs('Nodes', self.nodes)
+        """Report all current inputs of all nodes in the network"""
+        report_object_list_inputs('Nodes', self.nodes)
         return
     
     def report_link_inputs(self):
-        self.report_object_list_inputs('Links', self.links)
+        """Report all current inputs of all links in the network"""
+        report_object_list_inputs('Links', self.links)
         return
 
     def report_basin_inputs(self):
+        """Report all current inputs of all basins in the network"""
         basin_list = []
         for node in self.nodes:
             for basin in node.basins:
                 basin_list.append(basin)
-        self.report_object_list_inputs('Basins', basin_list)
+        report_object_list_inputs('Basins', basin_list)
         return
 
-    '''
-    @staticmethod
-    def show_objects_in_list(_list):
-        report = Report()
-        report.add_blank_line()
-        report.add_to_columns(['Index', 'Name', 'Class'])
-        report.add_break_line()
-        report.output()
-        show_object_list(None, _list, show_class=True)
-        report.add_blank_line()
-        return
-    '''
-
-    @staticmethod
-    def report_object_list_inputs(title, object_list):
-        report = Report()
-        report.add_blank_line()
-        report.add_title(title)
-        report.output()
-        for thing in object_list:
-            thing.report_inputs(show_title=False)
-            report.add_break_line()
-            report.add_blank_line()
-            report.output()
-        return

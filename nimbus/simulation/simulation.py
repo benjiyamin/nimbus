@@ -4,14 +4,17 @@ from math import ceil
 from nimbus.reports import Report, show_objects_in_list, property_to_string, float_to_string
 import copy
 from time import time
+from .progress import ProgressBar
 
 
 class Simulation:
 
-    def __init__(self, name=None, filepath=None, duration=None, interval=None,
+    def __init__(self, name=None, duration=None, interval=None,
                  rainfall=None, distribution=None):
         self.name = name
+        '''
         self.filepath = filepath
+        '''
         self.duration = duration  # hours
         self.interval = interval  # hours
         self.rainfall = rainfall  # inches
@@ -80,7 +83,10 @@ class Simulation:
         sim_networks = copy.deepcopy(self.networks)
         start_time = time()
         result_nodes, result_links = self.initialize_and_get_result_lists(sim_networks)
-        print('\nRunning routing simulations...')
+        start_message = 'Performing routing simulation and calculations...'
+        end_message = 'Success: Routing simulation complete!'
+        progress_bar = ProgressBar(60, start_message, end_message)
+        progress_bar.begin()
         for i in range(1, time_steps):
             curr_time = i * self.interval
             for network in sim_networks:
@@ -91,9 +97,8 @@ class Simulation:
                     result_tuple = self.set_flow_and_get_link_result_tuple(curr_time, link)
                     link.results.append(result_tuple)
                     self.adjust_link_flows(link)
-            prog_hash = 60 * i // time_steps + 1
-            print("[{}{}] {}%".format('#' * prog_hash, ' ' * (60 - prog_hash), i * 100 // time_steps + 1), end="\r")
-        print("\nSuccess: Routing simulations complete!")
+            progress_bar.update(i, time_steps)
+        progress_bar.complete()
         print("\nTotal simulation time: {:.2f} seconds.\n".format(time() - start_time))
         self.result = Result(result_nodes, result_links)
         return
@@ -153,7 +158,7 @@ class Simulation:
 
     def get_inputs(self):
         inputs = ['Name: ' + property_to_string(self, 'name'),
-                  'Filepath: ' + property_to_string(self, 'filepath'),
+                  #'Filepath: ' + property_to_string(self, 'filepath'),
                   'Duration (hr): ' + float_to_string(self.duration, 2),
                   'Interval (hr): ' + float_to_string(self.interval, 3),
                   'Rainfall (in): ' + float_to_string(self.rainfall, 2),
@@ -174,6 +179,7 @@ class Simulation:
         self.networks.remove(network)
         return
 
+    '''
     def set_path(self, directory, name=None):
         if name is None:
             if self.name is not None:
@@ -189,6 +195,7 @@ class Simulation:
                 name += ".nsf"
         self.filepath = directory + name
         return
+    '''
 
     '''
     def write(self, result):

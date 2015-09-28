@@ -1,5 +1,5 @@
-from math import pow, sqrt
 
+from math import pow, sqrt
 from .link import Link
 from .weir import Weir
 from nimbus.reports import Report, property_to_string, float_to_string

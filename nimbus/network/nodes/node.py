@@ -34,15 +34,8 @@ class Node:
         self.basins.append(copy_basin)
         return
 
-    def get_stage(self, storage, time):
-        stage = 0.0
-        return stage
-
-    def get_storage(self, elevation):
-        storage = 0.0
-        return storage
-
     def show_basins(self):
+        """Display all basins stored in the node's basin list."""
         show_objects_in_list('Basins', self.basins)
         return
 
@@ -50,3 +43,11 @@ class Node:
         inputs = ['Name: ' + property_to_string(self, 'name'),
                   'Starting Stage (ft): ' + float_to_string(self.start_stage, 3)]
         return inputs
+
+    def get_stage(self, storage, time):
+        stage = 0.0
+        return stage
+
+    def get_storage(self, elevation):
+        storage = 0.0
+        return storage
