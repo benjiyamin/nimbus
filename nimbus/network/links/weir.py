@@ -1,3 +1,4 @@
+
 from math import pow, sqrt
 
 from .link import Link

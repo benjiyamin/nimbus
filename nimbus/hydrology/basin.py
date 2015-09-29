@@ -1,7 +1,8 @@
 
 from math import pow
+
 from nimbus.reports import Report, property_to_string, float_to_string
-from nimbus.simulation import ProgressBar
+from nimbus.simulation.progress import ProgressBar
 
 
 class Basin:

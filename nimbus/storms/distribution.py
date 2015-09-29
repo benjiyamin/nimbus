@@ -1,5 +1,4 @@
 
-from math import ceil
 from nimbus.math import interpolate_from_table
 
 

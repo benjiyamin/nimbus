@@ -1,9 +1,10 @@
 
-from .result import Result
 from math import ceil
-from nimbus.reports import Report, show_objects_in_list, property_to_string, float_to_string
 import copy
 from time import time
+
+from .result import Result
+from nimbus.reports import Report, show_objects_in_list, property_to_string, float_to_string
 from .progress import ProgressBar
 
 
@@ -158,7 +159,7 @@ class Simulation:
 
     def get_inputs(self):
         inputs = ['Name: ' + property_to_string(self, 'name'),
-                  #'Filepath: ' + property_to_string(self, 'filepath'),
+                  # 'Filepath: ' + property_to_string(self, 'filepath'),
                   'Duration (hr): ' + float_to_string(self.duration, 2),
                   'Interval (hr): ' + float_to_string(self.interval, 3),
                   'Rainfall (in): ' + float_to_string(self.rainfall, 2),

@@ -1,5 +1,5 @@
 
-from nimbus.network.nodes.node import Node
+from .node import Node
 from nimbus.math import interpolate_from_table
 from nimbus.reports import Report, show_objects_in_list
 

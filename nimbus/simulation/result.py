@@ -1,6 +1,7 @@
 
-from nimbus.reports import Report, float_to_string
 from operator import itemgetter
+
+from nimbus.reports import Report, float_to_string
 
 
 class Result:
