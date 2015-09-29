@@ -1,5 +1,5 @@
 
-from nimbus.network.shapes import Shape
+from .shape import Shape
 
 
 class Rectangle(Shape):
