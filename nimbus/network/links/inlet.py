@@ -6,9 +6,10 @@ from nimbus.reports import Report, show_objects_in_list
 
 class Inlet(Pipe):
 
-    def __init__(self, name=None, node1=None, node2=None):
+    def __init__(self, name=None, shape=None, mannings=None,
+                 length=None, invert1=None, invert2=None, node1=None, node2=None):
         self.weirs = []
-        super(Inlet, self).__init__(name, node1, node2)
+        super(Inlet, self).__init__(name, shape, mannings, length, invert1, invert2, node1, node2)
 
     def create_weir(self, *args, **kwargs):
         """Create a weir and add it to the weir list."""

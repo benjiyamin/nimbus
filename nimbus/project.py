@@ -6,6 +6,9 @@ from nimbus.storms import RainfallDistribution
 from nimbus.reports import show_objects_in_list
 from nimbus.data import append_to_list_and_print, copy_from_list_and_print, \
     delete_from_list_and_print, clear_list_and_print
+from nimbus.data import NimList
+import nimbus.storms.defaults as stm
+import nimbus.hydrology.defaults as hyd
 
 
 class Project:
@@ -15,8 +18,8 @@ class Project:
         self.name = name
         self.networks = []
         self.simulations = []
-        self.hydrographs = []
-        self.distributions = []
+        self.hydrographs = hyd.defaults_list
+        self.distributions = stm.defaults_list
 
     def create_network(self, *args, **kwargs):
         """Create a network and add it to the network list."""

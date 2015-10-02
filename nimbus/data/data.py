@@ -1,5 +1,6 @@
 
 import copy
+import csv
 
 
 def clear_list_and_print(_list, delete_function):
@@ -31,3 +32,15 @@ def append_to_list_and_print(_object, _list):
     class_name = _object.__class__.__name__
     print('\nSuccess: New %s created.\n' % class_name)
     return
+
+
+def couples_from_csv(filename):
+    open_file = open(filename, "rt")
+    reader = csv.reader(open_file, delimiter=',')
+    tuple_list = []
+    for row in reader:
+        i = float(row[0])
+        j = float(row[1])
+        tuple_list.append((i, j))
+    open_file.close()
+    return tuple_list

@@ -8,7 +8,7 @@ from nimbus.project import Project
 class Nimbus:
 
     def __init__(self):
-        self.project = None
+        self.project = Project()
         self.filepath = ''
         print("\nSuccess: Nimbus is loaded and ready to go.\n")
 
