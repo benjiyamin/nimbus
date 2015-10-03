@@ -4,8 +4,10 @@ import copy
 from time import time
 
 from .result import Result
-from nimbus.reports import Report, show_objects_in_list, property_to_string, float_to_string
-from .progress import ProgressBar
+from nimbus.reports import property_to_string, float_to_string, InputReport
+from nimbus.reports.progress import ProgressBar
+from nimbus.data import NimList
+from nimbus.network import Network
 
 
 class Simulation:
@@ -13,14 +15,12 @@ class Simulation:
     def __init__(self, name=None, duration=None, interval=None,
                  rainfall=None, distribution=None):
         self.name = name
-        '''
-        self.filepath = filepath
-        '''
         self.duration = duration  # hours
         self.interval = interval  # hours
         self.rainfall = rainfall  # inches
         self.distribution = distribution
-        self.networks = []
+        self.networks = NimList(Network)
+        self.report = InputReport(self)
         self.result = None
 
     def get_tabulated_accumulated_rainfall(self):
@@ -28,8 +28,8 @@ class Simulation:
         time_steps = ceil(last_time / self.interval)
         tabulation = []
         for time_step in range(time_steps):
-            time = time_step * self.interval
-            new_couple = self.distribution.get_rainfall_couple(self.duration, self.rainfall, time)
+            time_ = time_step * self.interval
+            new_couple = self.distribution.get_rainfall_couple(self.duration, self.rainfall, time_)
             tabulation.append(new_couple)
         tabulation.append((tabulation[len(tabulation) - 1][0] + self.interval, self.rainfall))
         return tabulation
@@ -39,22 +39,22 @@ class Simulation:
         result_nodes = []
         result_links = []
         for network in network_list:
-            time = 0.0
-            for node in network.nodes:
+            time_ = 0.0
+            for node in network.nodes.list:
                 node.curr_stage = node.start_stage
                 node.curr_link_inflow = 0.0
                 node.curr_link_outflow = 0.0
-                node.results = [(time, node.curr_stage, node.curr_link_inflow, node.curr_link_outflow)]
+                node.results = [(time_, node.curr_stage, node.curr_link_inflow, node.curr_link_outflow)]
                 node.basin_hydrographs = []
-                for basin in node.basins:
+                for basin in node.basins.list:
                     hydrograph = basin.get_composite_hydrograph(tabulated_rainfall, self.interval)
                     node.basin_hydrographs.append(hydrograph)
                 result_nodes.append(node)
-            for link in network.links:
+            for link in network.links.list:
                 link.curr_flow = 0.0
                 link.curr_stage1 = link.node1.start_stage
                 link.curr_stage2 = link.node2.start_stage
-                link.results = [(time, link.curr_flow, link.curr_stage1, link.curr_stage2)]
+                link.results = [(time_, link.curr_flow, link.curr_stage1, link.curr_stage2)]
                 result_links.append(link)
         return result_nodes, result_links
 
@@ -81,7 +81,7 @@ class Simulation:
     def run_and_set_result(self):
         last_time = self.duration
         time_steps = ceil(last_time / self.interval)
-        sim_networks = copy.deepcopy(self.networks)
+        sim_networks = copy.deepcopy(self.networks.list)
         start_time = time()
         result_nodes, result_links = self.initialize_and_get_result_lists(sim_networks)
         start_message = 'Performing routing simulation and calculations...'
@@ -91,10 +91,10 @@ class Simulation:
         for i in range(1, time_steps):
             curr_time = i * self.interval
             for network in sim_networks:
-                for node in network.nodes:
+                for node in network.nodes.list:
                     result_tuple = self.set_stage_and_get_node_result_tuple(i, curr_time, node)
                     node.results.append(result_tuple)
-                for link in network.links:
+                for link in network.links.list:
                     result_tuple = self.set_flow_and_get_link_result_tuple(curr_time, link)
                     link.results.append(result_tuple)
                     self.adjust_link_flows(link)
@@ -146,18 +146,7 @@ class Simulation:
             pass
         return
 
-    def report_inputs(self, title=True):
-        title = 'Simulation'
-        report = Report()
-        if title:
-            report.add_title(title)
-        inputs = self.get_inputs()
-        for string in inputs:
-            report.add_string_line(string)
-        report.output()
-        return
-
-    def get_inputs(self):
+    def get_input_strings(self):
         inputs = ['Name: ' + property_to_string(self, 'name'),
                   # 'Filepath: ' + property_to_string(self, 'filepath'),
                   'Duration (hr): ' + float_to_string(self.duration, 2),
@@ -165,20 +154,6 @@ class Simulation:
                   'Rainfall (in): ' + float_to_string(self.rainfall, 2),
                   'Distribution: ' + property_to_string(self.distribution, 'name')]
         return inputs
-
-    def show_networks(self):
-        show_objects_in_list('Networks', self.networks)
-        return
-
-    def add_network(self, network):
-        """Add the specified network to the network list."""
-        self.networks.append(network)
-        return
-
-    def remove_network(self, network):
-        """Remove the specified network from the network list."""
-        self.networks.remove(network)
-        return
 
     '''
     def set_path(self, directory, name=None):

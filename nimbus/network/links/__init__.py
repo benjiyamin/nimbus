@@ -1,5 +1,5 @@
 
-from .link import *
-from .weir import *
-from .inlet import *
-from .pipe import *
+from .link import Link
+from .weir import Weir
+from .inlet import Inlet
+from .pipe import Pipe

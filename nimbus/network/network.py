@@ -1,8 +1,8 @@
 
 from nimbus.network.nodes import Node, Reservoir, Boundary
-from nimbus.network.links import Pipe, Weir, Inlet
-from nimbus.reports import show_objects_in_list, report_object_list_inputs
-from nimbus.data import append_to_list_and_print, delete_from_list_and_print, copy_from_list_and_print
+from nimbus.network.links import Link, Pipe, Weir, Inlet
+from nimbus.reports.report import report_object_list_inputs
+from nimbus.data.nimlist import NimList
 
 
 class Network:
@@ -10,91 +10,70 @@ class Network:
     def __init__(self, name=None):
         """Create a network. This is where nodes and links are organized for simulation."""
         self.name = name
-        self.nodes = []
-        self.links = []
-    
-    def create_node(self, *args, **kwargs):
-        """Create a node and add it to the node list."""
-        new_node = Node(*args, **kwargs)
-        append_to_list_and_print(new_node, self.nodes)
-        return
-
-    def create_reservoir(self, *args, **kwargs):
-        """Create a reservoir and add it to the node list."""
-        new_reservoir = Reservoir(*args, **kwargs)
-        append_to_list_and_print(new_reservoir, self.nodes)
-        return
-
-    def create_boundary(self, *args, **kwargs):
-        """Create a boundary and add it to the node list."""
-        new_boundary = Boundary(*args, **kwargs)
-        append_to_list_and_print(new_boundary, self.nodes)
-        return
-
-    def create_pipe(self, *args, **kwargs):
-        """Create a pipe and add it to the link list."""
-        new_pipe = Pipe(*args, **kwargs)
-        append_to_list_and_print(new_pipe, self.nodes)
-        return
-
-    def create_weir(self, *args, **kwargs):
-        """Create a weir and add it to the link list."""
-        new_weir = Weir(*args, **kwargs)
-        append_to_list_and_print(new_weir, self.nodes)
-        return
-    
-    def create_inlet(self, *args, **kwargs):
-        """Create an inlet and add it to the link list."""
-        new_inlet = Inlet(*args, **kwargs)
-        append_to_list_and_print(new_inlet, self.nodes)
-        return
-
-    def delete_node(self, index):
-        """Remove the node at the specified index from the node list and delete it."""
-        delete_from_list_and_print(index, self.nodes)
-        return
-
-    def copy_node(self, index):
-        """Create a copy of the node at the specified index from the node list and add it to the list"""
-        copy_from_list_and_print(index, self.nodes)
-        return
-
-    def delete_link(self, index):
-        """Remove the link at the specified index from the link list and delete it."""
-        delete_from_list_and_print(index, self.links)
-        return
-
-    def copy_link(self, index):
-        """Create a copy of the link at the specified index from the link list and add it to the list"""
-        copy_from_list_and_print(index, self.links)
-        return
-
-    def show_nodes(self):
-        """Display all nodes stored in the network's node list."""
-        show_objects_in_list('Nodes', self.nodes, True)
-        return
-
-    def show_links(self):
-        """Display all links stored in the network's link list."""
-        show_objects_in_list('Links', self.links, True)
-        return
+        self.nodes = NodeList()
+        self.links = LinkList()
 
     def report_node_inputs(self):
         """Report all current inputs of all nodes in the network"""
-        report_object_list_inputs('Nodes', self.nodes)
+        report_object_list_inputs('Nodes', self.nodes.list)
         return
     
     def report_link_inputs(self):
         """Report all current inputs of all links in the network"""
-        report_object_list_inputs('Links', self.links)
+        report_object_list_inputs('Links', self.links.list)
         return
 
     def report_basin_inputs(self):
         """Report all current inputs of all basins in the network"""
         basin_list = []
-        for node in self.nodes:
+        for node in self.nodes.list:
             for basin in node.basins:
                 basin_list.append(basin)
         report_object_list_inputs('Basins', basin_list)
         return
 
+
+class NodeList(NimList):
+
+    def __init__(self, list_=None):
+        if not list_:
+            list_ = []
+        super(NodeList, self).__init__(Node, list_, True)
+
+    def create_node(self, *args, **kwargs):
+        """Create a node and add it to the node list."""
+        self.create(Node, *args, **kwargs)
+        return
+
+    def create_reservoir(self, *args, **kwargs):
+        """Create a reservoir and add it to the node list."""
+        self.create(Reservoir, *args, **kwargs)
+        return
+
+    def create_boundary(self, *args, **kwargs):
+        """Create a boundary and add it to the node list."""
+        self.create(Boundary, *args, **kwargs)
+        return
+
+
+class LinkList(NimList):
+
+    def __init__(self, list_=None):
+        if not list_:
+            list_ = []
+        super(LinkList, self).__init__(Link, list_, True)
+
+    def create_pipe(self, *args, **kwargs):
+        """Create a pipe and add it to the link list."""
+        self.create(Pipe, *args, **kwargs)
+        return
+
+    def create_weir(self, *args, **kwargs):
+        """Create a weir and add it to the link list."""
+        self.create(Weir, *args, **kwargs)
+        return
+
+    def create_inlet(self, *args, **kwargs):
+        """Create an inlet and add it to the link list."""
+        self.create(Inlet, *args, **kwargs)
+        return

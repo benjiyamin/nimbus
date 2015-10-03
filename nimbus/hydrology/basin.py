@@ -1,8 +1,7 @@
-
 from math import pow
 
-from nimbus.reports import Report, property_to_string, float_to_string
-from nimbus.simulation.progress import ProgressBar
+from nimbus.reports import property_to_string, float_to_string, InputReport
+from nimbus.reports.progress import ProgressBar
 
 
 class Basin:
@@ -13,6 +12,7 @@ class Basin:
         self.cn = cn
         self.tc = tc  # minutes
         self.uh = uh
+        self.report = InputReport(self)
 
     def get_tabulated_runoff(self, rain_tabulation):
         runoff_tabulation = [(0.0, 0.0, 0.0)]
@@ -95,18 +95,7 @@ class Basin:
         potential_retention = 1000.0 / self.cn - 10.0
         return potential_retention
 
-    def report_inputs(self, show_title=True):
-        title = 'Basin'
-        report = Report()
-        if show_title is True:
-            report.add_title(title)
-        inputs = self.get_inputs()
-        for string in inputs:
-            report.add_string_line(string)
-        report.output()
-        return
-
-    def get_inputs(self):
+    def get_input_strings(self):
         inputs = ['Name: ' + property_to_string(self, 'name'),
                   'Area (ac): ' + float_to_string(self.area, 3),
                   'Curve Number: ' + float_to_string(self.cn, 2),

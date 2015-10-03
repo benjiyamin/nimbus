@@ -1,3 +1,3 @@
 
-from .basin import *
-from .uh import *
+from .basin import Basin
+from .uh import UnitHydrograph

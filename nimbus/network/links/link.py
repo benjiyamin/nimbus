@@ -2,7 +2,8 @@
 
 class Link:
 
-    def __init__(self, node1=None, node2=None, shape=None):
+    def __init__(self, name=None, node1=None, node2=None, shape=None):
+        self.name = name
         self.node1 = node1
         self.node2 = node2
         self.shape = shape

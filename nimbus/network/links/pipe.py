@@ -3,19 +3,19 @@ from math import pow, sqrt
 
 from .link import Link
 from .weir import Weir
-from nimbus.reports import Report, property_to_string, float_to_string
+from nimbus.reports import property_to_string, float_to_string, InputReport
 
 
 class Pipe(Link):
 
     def __init__(self, name=None, shape=None, mannings=None,
                  length=None, invert1=None, invert2=None, node1=None, node2=None):
-        self.name = name
+        super(Pipe, self).__init__(name, node1, node2, shape)
         self.mannings = mannings
         self.length = length  # feet
         self.invert1 = invert1  # feet
         self.invert2 = invert2  # feet
-        super(Pipe, self).__init__(node1, node2, shape)
+        self.report = InputReport(self)
 
     def get_wet_perimeter(self, depth):
         """Return the wet perimeter in LF at a given depth from the invert of the pipe."""
@@ -95,6 +95,7 @@ class Pipe(Link):
             velocity = sqrt(a / b)
         return velocity
 
+    '''
     def report_inputs(self, show_title=True):
         report = Report()
         if show_title is True:
@@ -105,8 +106,9 @@ class Pipe(Link):
             report.add_string_line(string)
         report.output()
         return
+    '''
 
-    def get_inputs(self):
+    def get_input_strings(self):
         if self.shape:
             shape_type = property_to_string(self.shape.__class__, '__name__')
             shape_span = float_to_string(self.shape.span, 3)

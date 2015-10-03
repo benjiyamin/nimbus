@@ -2,17 +2,17 @@
 from math import pow, sqrt
 
 from .link import Link
-from nimbus.reports import Report, property_to_string, float_to_string
+from nimbus.reports import property_to_string, float_to_string, InputReport
 
 
 class Weir(Link):
 
     def __init__(self, name=None, shape=None, orif_coef=None, weir_coef=None, invert=None, node1=None, node2=None):
-        self.name = name
+        super(Weir, self).__init__(name, node1, node2, shape)
         self.orif_coef = orif_coef
         self.weir_coef = weir_coef
         self.invert = invert
-        super(Weir, self).__init__(node1, node2, shape)
+        self.report = InputReport(self)
 
     def get_flow(self, stage1, stage2):
         """Return the flow of the weir given the stages on both sides of the link."""
@@ -50,18 +50,7 @@ class Weir(Link):
                 flow = 0.0
         return flow
 
-    def report_inputs(self, show_title=True):
-        report = Report()
-        if show_title is True:
-            title = 'Weir'
-            report.add_title(title)
-        inputs = self.get_inputs()
-        for string in inputs:
-            report.add_string_line(string)
-        report.output()
-        return
-
-    def get_inputs(self):
+    def get_input_strings(self):
         if self.shape:
             shape_type = property_to_string(self.shape.__class__, '__name__')
             shape_span = float_to_string(self.shape.span, 3)

@@ -1,29 +1,21 @@
 
 from .weir import Weir
 from .pipe import Pipe
-from nimbus.reports import Report, show_objects_in_list
+from nimbus.reports import InputReport
+from nimbus.data.nimlist import NimList
 
 
 class Inlet(Pipe):
 
     def __init__(self, name=None, shape=None, mannings=None,
                  length=None, invert1=None, invert2=None, node1=None, node2=None):
-        self.weirs = []
         super(Inlet, self).__init__(name, shape, mannings, length, invert1, invert2, node1, node2)
-
-    def create_weir(self, *args, **kwargs):
-        """Create a weir and add it to the weir list."""
-        new_weir = Weir(*args, **kwargs)
-        self.weirs.append(new_weir)
-        return
-
-    def show_weirs(self):
-        show_objects_in_list('Weir', self.weirs)
-        return
+        self.weirs = NimList(Weir)
+        self.report = InputReport(self)
 
     def get_flow(self, stage1, stage2):
         pipe_flow = super(Inlet, self).get_flow(stage1, stage2)
-        weir_flow = sum([weir.get_flow(stage1, stage2) for weir in self.weirs])
+        weir_flow = sum([weir.get_flow(stage1, stage2) for weir in self.weirs.list])
         if weir_flow > 0.0 and pipe_flow > 0.0:
             flow = min(weir_flow, pipe_flow)
         elif weir_flow < 0.0 and pipe_flow < 0.0:
@@ -31,20 +23,3 @@ class Inlet(Pipe):
         else:
             flow = weir_flow + pipe_flow
         return flow
-
-    def report_inputs(self, show_title=True):
-        report = Report()
-        if show_title is True:
-            title = 'Inlet'
-            report.add_title(title)
-        inputs = self.get_inputs()
-        for string in inputs:
-            report.add_string_line(string)
-        report.output()
-        for i, weir in enumerate(self.weirs):
-            report.clear_lines()
-            report.add_string_line('- Weir %s of %s -' % (i + 1, len(self.weirs)))
-            report.output()
-            weir.report_inputs(show_title=False)
-            report.add_blank_line()
-        return

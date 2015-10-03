@@ -2,13 +2,14 @@
 import pickle
 import os
 
-from nimbus.project import Project
+from .project import Project
 
 
 class Nimbus:
 
     def __init__(self):
-        self.project = Project()
+        new_project = Project()
+        self.project = new_project
         self.filepath = ''
         print("\nSuccess: Nimbus is loaded and ready to go.\n")
 

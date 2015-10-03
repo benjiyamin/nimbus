@@ -1,4 +1,3 @@
 
-from .simulation import *
-from .result import *
-from .progress import *
+from .simulation import Simulation
+from .result import Result

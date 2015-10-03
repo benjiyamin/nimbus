@@ -1,18 +1,18 @@
 
 from .link import Link
+from nimbus.reports import InputReport
 
 
 class Channel(Link):
 
     def __init__(self, name=None, shape=None, mannings=None,
                  length=None, invert1=None, invert2=None, node1=None, node2=None):
-
-        self.name = name
+        super(Channel, self).__init__(name, node1, node2, shape)
         self.mannings = mannings
         self.length = length  # feet
         self.invert1 = invert1  # feet
         self.invert2 = invert2  # feet
-        super(Channel, self).__init__(node1, node2, shape)
+        self.report = InputReport(self)
 
     def get_depth(self, stage, invert):
         """Return the depth given a stage and invert."""

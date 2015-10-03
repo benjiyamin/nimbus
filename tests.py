@@ -9,16 +9,16 @@ class ReservoirTest(unittest.TestCase):
 
     def test_elevation_vs_storage2elevation(self):
         from nimbus.network.nodes import Reservoir
-        self.reservoir = Reservoir()
-        self.reservoir.create_contour(14.0, 0.75)
-        self.reservoir.create_contour(17.0, 0.81)
-        self.reservoir.create_contour(17.0, 2.95)
-        self.reservoir.create_contour(26.0, 4.46)
-        self.reservoir.create_contour(30.5, 5.10)
-        self.reservoir.create_contour(31.5, 6.07)
+        reservoir = Reservoir()
+        reservoir.contours.create(14.0, 0.75)
+        reservoir.contours.create(17.0, 0.81)
+        reservoir.contours.create(17.0, 2.95)
+        reservoir.contours.create(26.0, 4.46)
+        reservoir.contours.create(30.5, 5.10)
+        reservoir.contours.create(1.5, 6.07)
         test_elevation = 20.0
-        storage = self.reservoir.get_storage(test_elevation)
-        elevation = self.reservoir.get_stage(storage)
+        storage = reservoir.get_storage(test_elevation)
+        elevation = reservoir.get_stage(storage)
         self.assertAlmostEqual(test_elevation, elevation, 3)
 
 
@@ -31,11 +31,11 @@ class NetworkTest(unittest.TestCase):
         from nimbus import Nimbus
         nimbus = Nimbus()
         nimbus.new_project()
-        nimbus.project.create_network(name='Test Network')
-        network = nimbus.project.networks[0]
-        network.create_node(name='Test Node')
-        network.copy_node(0)
-        self.assertNotEqual(network.nodes[0], network.nodes[1])
+        nimbus.project.networks.create(name='Test Network')
+        network = nimbus.project.networks.get_object_at(0)
+        network.nodes.create(name='Test Node')
+        network.nodes.copy_object_at(0)
+        self.assertNotEqual(network.nodes.get_object_at(0), network.nodes.get_object_at(1))
 
 
 class SimulationTest(unittest.TestCase):
@@ -47,14 +47,14 @@ class SimulationTest(unittest.TestCase):
         from nimbus import Nimbus
         nimbus = Nimbus()
         nimbus.new_project()
-        nimbus.project.create_network(name='Test Network')
-        network = nimbus.project.networks[0]
-        network.create_node(name='Test Node')
-        network_node = network.nodes[0]
+        nimbus.project.networks.create(name='Test Network')
+        network = nimbus.project.networks.get_object_at(0)
+        network.nodes.create(name='Test Node')
+        network_node = network.nodes.get_object_at(0)
         network_node.start_stage = 0.0
-        nimbus.project.create_simulation(name='Test Simulation')
-        simulation = nimbus.project.simulations[0]
-        simulation.add_network(network)
+        nimbus.project.simulations.create(name='Test Simulation')
+        simulation = nimbus.project.simulations.get_object_at(0)
+        simulation.networks.add_object_at(0, nimbus.project.networks.list)
         simulation.duration = 1.0
         simulation.interval = 1.0
         simulation.rainfall = 1.0
