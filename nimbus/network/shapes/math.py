@@ -16,3 +16,8 @@ def get_slope_area(slope, height):
 def get_slope_perimeter(slope, height):
     perimeter = pow(pow(height * slope, 2.0) + pow(height, 2.0), 0.5)
     return perimeter
+
+
+def inches2feet(inches):
+    in_feet = inches / 12.0
+    return in_feet

@@ -2,12 +2,12 @@
 import copy
 import csv
 
-
+'''
 def clear_list_and_print(_list, delete_function):
     for i, thing in enumerate(_list):
-        delete_function(i)
+        delete_function(-1)
     return
-
+'''
 
 def delete_from_list_and_print(index, list_):
     thing = list_[index]

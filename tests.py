@@ -32,10 +32,10 @@ class NetworkTest(unittest.TestCase):
         nimbus = Nimbus()
         nimbus.new_project()
         nimbus.project.networks.create(name='Test Network')
-        network = nimbus.project.networks.get_object_at(0)
+        network = nimbus.project.networks.get(0)
         network.nodes.create(name='Test Node')
-        network.nodes.copy_object_at(0)
-        self.assertNotEqual(network.nodes.get_object_at(0), network.nodes.get_object_at(1))
+        network.nodes.copy(0)
+        self.assertNotEqual(network.nodes.get(0), network.nodes.get(1))
 
 
 class SimulationTest(unittest.TestCase):
@@ -48,13 +48,13 @@ class SimulationTest(unittest.TestCase):
         nimbus = Nimbus()
         nimbus.new_project()
         nimbus.project.networks.create(name='Test Network')
-        network = nimbus.project.networks.get_object_at(0)
+        network = nimbus.project.networks.get(0)
         network.nodes.create(name='Test Node')
-        network_node = network.nodes.get_object_at(0)
+        network_node = network.nodes.get(0)
         network_node.start_stage = 0.0
         nimbus.project.simulations.create(name='Test Simulation')
-        simulation = nimbus.project.simulations.get_object_at(0)
-        simulation.networks.add_object_at(0, nimbus.project.networks.list)
+        simulation = nimbus.project.simulations.get(0)
+        simulation.networks.add_from(0, nimbus.project.networks.list)
         simulation.duration = 1.0
         simulation.interval = 1.0
         simulation.rainfall = 1.0

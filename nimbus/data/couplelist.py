@@ -1,6 +1,5 @@
 
-from .data import delete_from_list_and_print, copy_from_list_and_print, \
-                  clear_list_and_print
+from .data import delete_from_list_and_print, copy_from_list_and_print
 from nimbus.reports.report import show_couples_in_list
 
 
@@ -31,22 +30,29 @@ class CoupleList:
         show_couples_in_list(self.name, self.headers, self.list)
         return
 
-    def delete_object_at(self, index):
+    def delete(self, index):
         """Remove the object at the specified index from the list and delete it."""
         delete_from_list_and_print(index, self.list)
         return
 
-    def copy_object_at(self, index):
+    def copy(self, index):
         """Create a copy of the object at the specified index
         from the list and append it to the end of the list"""
         copy_from_list_and_print(index, self.list)
         return
 
-    def clear_all(self):
-        """Remove all objects from the list and delete them."""
-        clear_list_and_print(self.list, self.delete_object_at)
-        return
-
-    def get_object_at(self, index):
+    def get(self, index):
         object_ = self.list[index]
         return object_
+
+    def all(self):
+        objects = self.list
+        return objects
+
+    def enumerate(self):
+        tuples = enumerate(self.list)
+        return tuples
+
+    def length(self):
+        length = len(self.list)
+        return length
