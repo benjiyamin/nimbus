@@ -38,7 +38,7 @@ class Nimbus:
             self.filepath = os.path.abspath(filepath)
         pickle.dump(self.project, open_file)
         open_file.close()
-        print("\nSuccess: Project saved to '%s'\n" % self.filepath)
+        print("\nSuccess: Project saved to '%s'.\n" % self.filepath)
         return
 
     def load_project(self, filepath):
@@ -51,5 +51,5 @@ class Nimbus:
         open_file.close()
         self.project = project
         self.filepath = os.path.abspath(filepath)
-        print("\nSuccess: Project loaded from '%s'\n" % self.filepath)
+        print("\nSuccess: Project loaded from '%s'.\n" % self.filepath)
         return

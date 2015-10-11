@@ -22,19 +22,21 @@ class Rectangle(Shape):
     def get_wet_perimeter(self, depth):
         """Return the wet perimeter in LF at a given depth from the invert of the shape."""
         if not self.horizontal:
-            if depth == self.rise:
-                wet_perimeter = 2.0 * inches2feet(self.span) + 2.0 * inches2feet(self.rise)
+            if depth >= self.rise:
+                wet_perimeter = self.get_perimeter()
             else:
-                wet_perimeter = inches2feet(self.span) + 2.0 * inches2feet(depth)
+                wet_perimeter = self.span + 2.0 * depth
         else:
-            perimeter = self.get_perimeter()
-            wet_perimeter = inches2feet(perimeter)
-        return wet_perimeter
+            wet_perimeter = self.get_perimeter()
+        converted_perimeter = inches2feet(wet_perimeter)
+        return converted_perimeter
 
     def get_perimeter(self):
         perimeter = 2.0 * self.span + 2.0 * self.rise
         return perimeter
 
-    def get_equivalent_head(self, depth):
-        equivalent_head = depth
-        return equivalent_head
+    def get_weir_flow(self, coefficient, depth):
+        converted_head = inches2feet(depth)
+        converted_span = inches2feet(self.span)
+        flow = coefficient * converted_span * pow(converted_head, 1.5)
+        return flow

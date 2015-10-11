@@ -43,6 +43,7 @@ class CoupleList:
 
     def get(self, index):
         object_ = self.list[index]
+        print('\nSuccess: %s object assigned to variable.\n' % object_.__class__.__name__)
         return object_
 
     def all(self):

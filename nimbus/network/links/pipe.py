@@ -1,9 +1,10 @@
 
-from math import pow, sqrt
+import math
 
 from .link import Link
 from .weir import Weir
 from nimbus.reports import property_to_string, float_to_string, InputReport
+from nimbus.network.shapes import Circle, Rectangle
 
 
 class Pipe(Link):
@@ -92,7 +93,7 @@ class Pipe(Link):
         else:
             a = (upper_el - lower_el) * 2.0 * 32.2
             b = 2.0 * 32.2 / pow(1.486, 2.0) * pow(self.mannings, 2.0) * self.length / pow(hyd_radius, 4.0 / 3.0)
-            velocity = sqrt(a / b)
+            velocity = math.sqrt(a / b)
         return velocity
 
     '''
@@ -126,6 +127,14 @@ class Pipe(Link):
                   'Invert 1 (ft): ' + float_to_string(self.invert1, 3),
                   'Invert 2 (ft): ' + float_to_string(self.invert2, 3)]
         return inputs
+
+    def set_shape_as_rectangle(self, span, rise, horizontal=False):
+        self.shape = Rectangle(span, rise, horizontal)
+        return
+
+    def set_shape_as_circle(self, diameter, horizontal=False):
+        self.shape = Circle(diameter, horizontal)
+        return
 
     '''
     def get_average_depth(self, stage1, stage2):

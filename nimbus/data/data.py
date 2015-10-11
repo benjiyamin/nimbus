@@ -9,6 +9,7 @@ def clear_list_and_print(_list, delete_function):
     return
 '''
 
+
 def delete_from_list_and_print(index, list_):
     thing = list_[index]
     list_.remove(thing)

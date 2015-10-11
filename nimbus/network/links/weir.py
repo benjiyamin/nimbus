@@ -1,8 +1,9 @@
 
-from math import pow, sqrt
+import math
 
 from .link import Link
 from nimbus.reports import property_to_string, float_to_string, InputReport
+from nimbus.network.shapes import Circle, Rectangle
 
 
 class Weir(Link):
@@ -25,7 +26,7 @@ class Weir(Link):
                 else:                                                                   # submerged flow
                     eff_head = stage1 - stage2
                 area = self.shape.get_flow_area(self.shape.rise)
-                flow = self.orif_coef * area * sqrt(2.0 * 32.2 * eff_head)
+                flow = self.orif_coef * area * math.sqrt(2.0 * 32.2 * eff_head)
             elif stage1 > self.invert:                                                  # weir flow
                 eff_head = stage1 - self.invert
                 flow = self.weir_coef * self.shape.span / 12.0 * pow(eff_head, 1.5)
@@ -40,7 +41,7 @@ class Weir(Link):
                 else:                                                                   # submerged flow
                     eff_head = stage2 - stage1
                 area = self.shape.get_flow_area(self.shape.rise)
-                flow = -self.orif_coef * area * sqrt(2.0 * 32.2 * eff_head)
+                flow = -self.orif_coef * area * math.sqrt(2.0 * 32.2 * eff_head)
             elif stage2 > self.invert:                                                  # weir flow
                 eff_head = stage2 - self.invert
                 flow = -self.weir_coef * self.shape.span / 12.0 * pow(eff_head, 1.5)
@@ -67,3 +68,11 @@ class Weir(Link):
                   'Weir. Coef: ' + float_to_string(self.weir_coef, 3),
                   'Invert: ' + float_to_string(self.invert, 3)]
         return inputs
+
+    def set_shape_as_rectangle(self, span, rise, horizontal=False):
+        self.shape = Rectangle(span, rise, horizontal)
+        return
+
+    def set_shape_as_circle(self, diameter, horizontal=False):
+        self.shape = Circle(diameter, horizontal)
+        return

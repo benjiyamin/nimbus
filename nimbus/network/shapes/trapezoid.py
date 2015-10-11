@@ -27,27 +27,33 @@ class Trapezoid(Shape):
     def get_wet_perimeter(self, depth):
         """Return the wet perimeter in LF at a given depth from the invert of the shape."""
         if not self.horizontal:
-            converted_depth = inches2feet(depth)
             if depth < self.rise or not self.rise:
                 d = 0.0
             else:
-                d = inches2feet(self.span) + self.left_slope * converted_depth + self.right_slope * converted_depth
-            a = get_slope_perimeter(self.left_slope, converted_depth)
+                d = self.span + self.left_slope * depth + self.right_slope * depth
+            a = get_slope_perimeter(self.left_slope, depth)
             b = inches2feet(self.span)
-            c = get_slope_perimeter(self.right_slope, converted_depth)
+            c = get_slope_perimeter(self.right_slope, depth)
             wet_perimeter = a + b + c + d
         else:
             wet_perimeter = self.get_perimeter()
-        return wet_perimeter
+        converted_wet_perimeter = inches2feet(wet_perimeter)
+        return converted_wet_perimeter
 
     def get_perimeter(self):
-        converted_rise = inches2feet(self.rise)
-        a = get_slope_perimeter(self.left_slope, converted_rise)
+        a = get_slope_perimeter(self.left_slope, self.rise)
         b = inches2feet(self.span)
-        c = get_slope_perimeter(self.right_slope, converted_rise)
-        d = inches2feet(self.span) + self.left_slope * converted_rise + self.right_slope * converted_rise
+        c = get_slope_perimeter(self.right_slope, self.rise)
+        d = inches2feet(self.span) + self.left_slope * self.rise + self.right_slope * self.rise
         perimeter = a + b + c + d
         return perimeter
 
-    def get_equivalent_head(self, depth, iterations=20):
-        pass
+    def get_weir_flow(self, coefficient, depth):
+        head1 = 0.0
+        head2 = inches2feet(depth)
+        converted_span = inches2feet(self.span)
+        flow1 = coefficient * head2 * self.left_slope * (pow(head2, 2.5) - (pow(head1, 2.5))) / 2.5 / (head2 - head1)
+        flow2 = coefficient * converted_span * pow(head2, 1.5)
+        flow3 = coefficient * head2 * self.right_slope * (pow(head2, 2.5) - (pow(head1, 2.5))) / 2.5 / (head2 - head1)
+        flow = flow1 + flow2 + flow3
+        return flow
