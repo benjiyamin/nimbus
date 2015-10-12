@@ -4,9 +4,8 @@ import copy
 import time
 
 from .result import Result
-from nimbus.reports import property_to_string, float_to_string, InputReport
-from nimbus.reports.progress import ProgressBar
-from nimbus.data import NimList
+from nimbus.reports import property_to_string, float_to_string, InputReport, ProgressBar
+from nimbus.data import ObjectList
 from nimbus.network import Network
 
 
@@ -19,7 +18,7 @@ class Simulation:
         self.interval = interval  # hours
         self.rainfall = rainfall  # inches
         self.distribution = distribution
-        self.networks = NimList(Network)
+        self.networks = ObjectList(Network)
         self.report = InputReport(self)
         self.result = None
 

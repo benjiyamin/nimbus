@@ -2,12 +2,11 @@
 import os
 
 from nimbus.data import couples_from_csv
-from nimbus.storms.distribution import RainfallDistribution
+from .distribution import RainfallDistribution
 
 
 abs_path = os.path.abspath(__file__)
 dir_name = os.path.dirname(abs_path)
-
 
 delaney = RainfallDistribution("DELANEY", couples_from_csv(dir_name + "/csv/delaney.csv"))
 fdot1 = RainfallDistribution("FDOT-1", couples_from_csv(dir_name + "/csv/fdot1.csv"))

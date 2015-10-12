@@ -1,32 +1,91 @@
 
+import math
+
 from .shape import Shape
 from .math import inches2feet
-import math
+from nimbus.data import PointList
 
 
 class Custom(Shape):
 
-    def __init__(self, points, horizontal=False):
+    def __init__(self, points=None, horizontal=False):
         super(Custom, self).__init__(horizontal)
-        self.points = []
+        self.points = PointList(self, points)
+        self.span = self.rise = 0.0
+        self.set_span_and_rise()
+
+    def set_span_and_rise(self):
+        if self.points.length() == 0:
+            self.span = self.rise = 0.0
+        else:
+            max_x = max([point[0] for point in self.points.all()])
+            min_x = min([point[0] for point in self.points.all()])
+            max_y = max([point[1] for point in self.points.all()])
+            min_y = min([point[1] for point in self.points.all()])
+            self.span = max_x - min_x
+            self.rise = max_y - min_y
+        return
 
     def get_flow_area(self, depth):
         """Return the flow area in SF at a given depth from the invert of the shape."""
         if not self.horizontal:
-            span = self.span
+            flow_area = 0.0
+            min_y = min(point[1] for point in self.points.all())
+            for i, point in self.points.enumerate():
+                point1 = self.points.get(i - 1)
+                point2 = point
+                head1 = depth - inches2feet(point1[1] - min_y)
+                head2 = depth - inches2feet(point2[1] - min_y)
+                span = inches2feet(abs(point2[0] - point1[0]))
+                if head1 <= 0.0 and head2 <= 0.0:
+                    flow_area += 0.0
+                elif head1 == head2:
+                    flow_area += span * head2
+                elif head1 <= 0.0 or head2 <= 0.0:
+                    max_head = max(head1, head2)
+                    min_head = min(head1, head2)
+                    ratio = max_head / (max_head - min_head)
+                    span *= ratio
+                    head2 = max_head
+                    flow_area += 0.5 * span * head2
+                else:
+                    max_head = max(head1, head2)
+                    min_head = min(head1, head2)
+                    flow_area += span * min_head + 0.5 * span * (max_head - min_head)
         else:
             span = self.get_perimeter()
-        flow_area = inches2feet(depth) * inches2feet(span)
+            flow_area = inches2feet(depth) * inches2feet(span)
         return flow_area
 
     def get_wet_perimeter(self, depth):
         """Return the wet perimeter in LF at a given depth from the invert of the shape."""
         if not self.horizontal:
-            max_y = max(point[1] for point in self.points)
+            max_y = max(point[1] for point in self.points.all())
             if depth >= max_y:
                 wet_perimeter = self.get_perimeter()
             else:
-                wet_perimeter = inches2feet(self.span) + 2.0 * inches2feet(depth)
+                wet_perimeter = 0.0
+                min_y = min(point[1] for point in self.points.all())
+                for i, point in self.points.enumerate():
+                    point1 = self.points.get(i - 1)
+                    point2 = point
+                    head1 = depth - inches2feet(point1[1] - min_y)
+                    head2 = depth - inches2feet(point2[1] - min_y)
+                    span = inches2feet(abs(point2[0] - point1[0]))
+                    if head1 <= 0.0 and head2 <= 0.0:
+                        wet_perimeter += 0.0
+                    elif head1 == head2:
+                        wet_perimeter += span
+                    elif head1 <= 0.0 or head2 <= 0.0:
+                        max_head = max(head1, head2)
+                        min_head = min(head1, head2)
+                        ratio = max_head / (max_head - min_head)
+                        span *= ratio
+                        wet_perimeter += math.hypot(span, max_head - min_head)
+                    else:
+                        max_head = max(head1, head2)
+                        min_head = min(head1, head2)
+                        wet_perimeter += math.hypot(span, max_head - min_head)
         else:
             perimeter = self.get_perimeter()
             wet_perimeter = inches2feet(perimeter)
@@ -34,14 +93,34 @@ class Custom(Shape):
 
     def get_perimeter(self):
         perimeter = 0.0
-        for i, point in enumerate(self.points):
-            point1 = self.points[i - 1]
+        for i, point in self.points.enumerate():
+            point1 = self.points.get(i - 1)
             point2 = point
             length = math.hypot(point2[0] - point1[0], point2[1] - point1[1])
             perimeter += length
         return perimeter
 
     def get_weir_flow(self, coefficient, depth):
-        head = depth
-        flow = coefficient * self.span * pow(head, 1.5)
+        min_y = min(point[1] for point in self.points.all())
+        flow = 0.0
+        for i, point in self.points.enumerate():
+            point1 = self.points.get(i - 1)
+            point2 = point
+            head1 = depth - inches2feet(point1[1] - min_y)
+            head2 = depth - inches2feet(point2[1] - min_y)
+            span = inches2feet(abs(point2[0] - point1[0]))
+            if head1 <= 0.0 and head2 <= 0.0:
+                flow += 0.0
+            elif head1 == head2:
+                flow += coefficient * span * pow(head2, 1.5)
+            elif head1 <= 0.0 or head2 <= 0.0:
+                max_head = max(head1, head2)
+                min_head = min(head1, head2)
+                ratio = max_head / (max_head - min_head)
+                span *= ratio
+                head1 = 0.0
+                head2 = max_head
+                flow += coefficient * span * (pow(head2, 2.5) - (pow(head1, 2.5))) / 2.5 / (head2 - head1)
+            else:
+                flow += coefficient * span * (pow(head2, 2.5) - (pow(head1, 2.5))) / 2.5 / (head2 - head1)
         return flow

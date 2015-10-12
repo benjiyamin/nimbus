@@ -18,4 +18,7 @@ class InputReport:
         report.output()
         if self.couple_list:
             show_couples_in_list(None, self.couple_list.headers, self.couple_list.list)
+        else:
+            report.add_blank_line()
+            report.output()
         return

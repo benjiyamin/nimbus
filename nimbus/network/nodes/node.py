@@ -1,7 +1,7 @@
 
 from nimbus.hydrology.basin import Basin
 from nimbus.reports.report import property_to_string, float_to_string
-from nimbus.data.nimlist import NimList
+from nimbus.data.objectlist import ObjectList
 
 
 class Node:
@@ -9,7 +9,7 @@ class Node:
     def __init__(self, name=None, start_stage=None):
         self.name = name
         self.start_stage = start_stage
-        self.basins = NimList(Basin)
+        self.basins = ObjectList(Basin)
 
     def get_input_strings(self):
         inputs = ['Name: ' + property_to_string(self, 'name'),

@@ -1,7 +1,7 @@
 
 from nimbus.math import interpolate_from_table
 from nimbus.data.couplelist import CoupleList
-from nimbus.reports import Report, show_couples_in_list, property_to_string, InputReport
+from nimbus.reports import property_to_string, InputReport
 
 
 class RainfallDistribution:

@@ -12,7 +12,9 @@ class Reservoir(Node):
 
     def __init__(self, name=None, start_stage=None, contours=None):
         super(Reservoir, self).__init__(name, start_stage)
-        self.contours = CoupleList('Contours', ('Stage (ft)', 'Area (ac)'), contours)
+        self.contours = CoupleList('Contours',
+                                   ('Stage (ft)', 'Area (ac)'),
+                                   contours)
         self.report = InputReport(self, self.contours)
 
     def get_area(self, elevation):

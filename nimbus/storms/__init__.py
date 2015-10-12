@@ -1,2 +1,2 @@
 
-from .distribution import *
+from .distribution import RainfallDistribution

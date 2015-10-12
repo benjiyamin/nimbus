@@ -118,4 +118,3 @@ def property_to_string(object_, property_):
     else:
         string = 'Undefined'
     return string
-

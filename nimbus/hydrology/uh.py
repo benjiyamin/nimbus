@@ -1,5 +1,5 @@
 
-from math import ceil
+import math
 
 from nimbus.math.math import interpolate_from_table
 from nimbus.data.couplelist import CoupleList
@@ -32,7 +32,7 @@ class UnitHydrograph:
         else:
             last_time_ratio = uh_couples[-1][0]
             last_time = last_time_ratio * peak_time
-            len_time_steps = ceil(last_time / time_step)
+            len_time_steps = math.ceil(last_time / time_step)
             for t in range(len_time_steps):
                 time = t * time_step
                 runoff_ratio = self.get_runoff_ratio(time, peak_time)

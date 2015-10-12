@@ -1,4 +1,5 @@
 
+
 class ProgressBar:
 
     def __init__(self, length, start_message=None, end_message=None):

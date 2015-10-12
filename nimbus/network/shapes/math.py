@@ -1,10 +1,10 @@
 
-from math import acos
+import math
 
 
 def get_alpha(height, diameter):
     """Return the alpha value utilized for circular hydraulics."""
-    alpha = acos(1.0 - height / (diameter / 2.0))
+    alpha = math.acos(1.0 - height / (diameter / 2.0))
     return alpha
 
 

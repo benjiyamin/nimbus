@@ -1,5 +1,5 @@
 
-from .shape import *
-from .circle import *
-from .rectangle import *
-from .trapezoid import *
+from .circle import Circle
+from .rectangle import Rectangle
+from .shape import Shape
+from .trapezoid import Trapezoid
