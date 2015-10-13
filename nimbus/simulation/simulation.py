@@ -3,10 +3,10 @@ import math
 import copy
 import time
 
-from .result import Result
-from nimbus.reports import property_to_string, float_to_string, InputReport, ProgressBar
-from nimbus.data import ObjectList
-from nimbus.network import Network
+from . import result as rs
+from nimbus.reports import input as inp, progress as prg, report as rp
+from nimbus.data import object as obj
+from nimbus.network import network as nw
 
 
 class Simulation:
@@ -18,8 +18,8 @@ class Simulation:
         self.interval = interval  # hours
         self.rainfall = rainfall  # inches
         self.distribution = distribution
-        self.networks = ObjectList(Network)
-        self.report = InputReport(self)
+        self.networks = obj.ObjectList(nw.Network)
+        self.report = inp.InputReport(self)
         self.result = None
 
     def get_tabulated_accumulated_rainfall(self):
@@ -85,7 +85,7 @@ class Simulation:
         result_nodes, result_links = self.initialize_and_get_result_lists(sim_networks)
         start_message = 'Performing routing simulation and calculations...'
         end_message = 'Success: Routing simulation complete!'
-        progress_bar = ProgressBar(60, start_message, end_message)
+        progress_bar = prg.ProgressBar(60, start_message, end_message)
         progress_bar.begin()
         for i in range(1, time_steps):
             curr_time = i * self.interval
@@ -100,15 +100,15 @@ class Simulation:
             progress_bar.update(i, time_steps)
         progress_bar.complete()
         print("\nTotal simulation time: {:.2f} seconds.\n".format(time.time() - start_time))
-        self.result = Result(result_nodes, result_links)
+        self.result = rs.Result(result_nodes, result_links)
         return
 
     def get_input_strings(self):
-        inputs = ['Name: ' + property_to_string(self, 'name'),
-                  'Duration (hr): ' + float_to_string(self.duration, 2),
-                  'Interval (hr): ' + float_to_string(self.interval, 3),
-                  'Rainfall (in): ' + float_to_string(self.rainfall, 2),
-                  'Distribution: ' + property_to_string(self.distribution, 'name')]
+        inputs = ['Name: ' + rp.property_to_string(self, 'name'),
+                  'Duration (hr): ' + rp.float_to_string(self.duration, 2),
+                  'Interval (hr): ' + rp.float_to_string(self.interval, 3),
+                  'Rainfall (in): ' + rp.float_to_string(self.rainfall, 2),
+                  'Distribution: ' + rp.property_to_string(self.distribution, 'name')]
         return inputs
 
     '''

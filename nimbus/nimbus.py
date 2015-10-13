@@ -2,20 +2,19 @@
 import pickle
 import os
 
-from .project import Project
+from . import project as prj
 
 
 class Nimbus:
 
     def __init__(self):
-        new_project = Project()
-        self.project = new_project
+        self.project = prj.Project()
         self.filepath = ''
         print("\nSuccess: Nimbus is loaded and ready to go.\n")
 
     def new_project(self):
         """Create a project and set it as nimbus's project."""
-        new_project = Project()
+        new_project = prj.Project()
         self.project = new_project
         print("\nSuccess: New project created.\n")
         return

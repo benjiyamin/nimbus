@@ -1,23 +1,23 @@
 
-from nimbus.data import data
-from nimbus.reports.report import show_couples_in_list
-from .baselist import BaseList
+from . import data, base
+from nimbus.reports import report as rp
 
 
-class CoupleList(BaseList):
+class CoupleList(base.BaseList):
 
     def __init__(self, name, headers, list_=None):
         self.name = name
         self.headers = headers
         super(CoupleList, self).__init__(list_)
 
-    def create(self, value1, value2, order=True):
+    def create(self, value1, value2, order=True, respond=True):
         """Create a new couple and add it to the list."""
         new_couple = value1, value2
         self.list.append(new_couple)
         if order:
             self.order()
-        self.show_all()
+        if respond:
+            self.show_all()
         return
 
     def copy(self, index, order=True):
@@ -35,5 +35,5 @@ class CoupleList(BaseList):
 
     def show_all(self):
         """Display all list stored in the list."""
-        show_couples_in_list(self.name, self.headers, self.list)
+        rp.show_couples_in_list(self.name, self.headers, self.list)
         return

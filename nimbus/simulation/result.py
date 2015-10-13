@@ -1,5 +1,5 @@
 
-from nimbus.reports import ResultReport
+from nimbus.reports import result as rs
 
 
 class Result:
@@ -7,7 +7,7 @@ class Result:
     def __init__(self, nodes, links):
         self.nodes = nodes
         self.links = links
-        self.report = ResultReport(self)
+        self.report = rs.ResultReport(self)
 
     '''
     def write(self, filepath):

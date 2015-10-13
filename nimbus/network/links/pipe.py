@@ -1,13 +1,14 @@
 
 import math
 
-from .link import Link
-from .weir import Weir
-from nimbus.reports import property_to_string, float_to_string, InputReport
-from nimbus.network.shapes import Circle, Rectangle
+from . import link, weir
+from nimbus.reports import report as rp
+from nimbus.reports import input as inp
+from nimbus.network.shapes import circle as cir
+from nimbus.network.shapes import rectangle as rct
 
 
-class Pipe(Link):
+class Pipe(link.Link):
 
     def __init__(self, name=None, shape=None, mannings=None,
                  length=None, invert1=None, invert2=None, node1=None, node2=None):
@@ -16,7 +17,7 @@ class Pipe(Link):
         self.length = length  # feet
         self.invert1 = invert1  # feet
         self.invert2 = invert2  # feet
-        self.report = InputReport(self)
+        self.report = inp.InputReport(self)
 
     def get_wet_perimeter(self, depth):
         """Return the wet perimeter in LF at a given depth from the invert of the pipe."""
@@ -60,8 +61,8 @@ class Pipe(Link):
                 area = self.get_flow_area(depth)
                 flow = velocity * area
             else:                                                                       # pipe inclined
-                weir_flow = Weir(shape=self.shape, orif_coef=1.0,
-                                 weir_coef=2.63, invert=self.invert2)
+                weir_flow = weir.Weir(shape=self.shape, orif_coef=1.0,
+                                      weir_coef=2.63, invert=self.invert2)
                 flow = weir_flow.get_flow(stage1, stage2)
         elif stage2 > stage1:                                                           # stage 2 higher
             if self.invert2 > self.invert1:                                             # pipe declined
@@ -79,8 +80,8 @@ class Pipe(Link):
                 area = self.get_flow_area(depth)
                 flow = velocity * area
             else:                                                                       # pipe inclined
-                weir_flow = Weir(shape=self.shape, orif_coef=1.0,
-                                 weir_coef=2.63, invert=self.invert1)
+                weir_flow = weir.Weir(shape=self.shape, orif_coef=1.0,
+                                      weir_coef=2.63, invert=self.invert1)
                 flow = -weir_flow.get_flow(stage2, stage1)
         else:
             flow = 0.0
@@ -111,29 +112,29 @@ class Pipe(Link):
 
     def get_input_strings(self):
         if self.shape:
-            shape_type = property_to_string(self.shape.__class__, '__name__')
-            shape_span = float_to_string(self.shape.span, 3)
-            shape_rise = float_to_string(self.shape.rise, 3)
+            shape_type = rp.property_to_string(self.shape.__class__, '__name__')
+            shape_span = rp.float_to_string(self.shape.span, 3)
+            shape_rise = rp.float_to_string(self.shape.rise, 3)
         else:
             shape_type = shape_span = shape_rise = 'Undefined'
-        inputs = ['Name: ' + property_to_string(self, 'name'),
-                  'Node 1: ' + property_to_string(self.node1, 'name'),
-                  'Node 2: ' + property_to_string(self.node2, 'name'),
+        inputs = ['Name: ' + rp.property_to_string(self, 'name'),
+                  'Node 1: ' + rp.property_to_string(self.node1, 'name'),
+                  'Node 2: ' + rp.property_to_string(self.node2, 'name'),
                   'Shape Type: ' + shape_type,
                   'Span (in): ' + shape_span,
                   'Rise (in): ' + shape_rise,
-                  'Mannings: ' + float_to_string(self.mannings, 3),
-                  'Length (ft): ' + float_to_string(self.length, 3),
-                  'Invert 1 (ft): ' + float_to_string(self.invert1, 3),
-                  'Invert 2 (ft): ' + float_to_string(self.invert2, 3)]
+                  'Mannings: ' + rp.float_to_string(self.mannings, 3),
+                  'Length (ft): ' + rp.float_to_string(self.length, 3),
+                  'Invert 1 (ft): ' + rp.float_to_string(self.invert1, 3),
+                  'Invert 2 (ft): ' + rp.float_to_string(self.invert2, 3)]
         return inputs
 
     def set_shape_as_rectangle(self, span, rise, horizontal=False):
-        self.shape = Rectangle(span, rise, horizontal)
+        self.shape = rct.Rectangle(span, rise, horizontal)
         return
 
     def set_shape_as_circle(self, diameter, horizontal=False):
-        self.shape = Circle(diameter, horizontal)
+        self.shape = cir.Circle(diameter, horizontal)
         return
 
     '''

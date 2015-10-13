@@ -1,19 +1,21 @@
 
 import math
 
-from .link import Link
-from nimbus.reports import property_to_string, float_to_string, InputReport
-from nimbus.network.shapes import Circle, Rectangle
+from . import link
+from nimbus.reports import report as rp
+from nimbus.reports import input as inp
+from nimbus.network.shapes import circle as cir
+from nimbus.network.shapes import rectangle as rct
 
 
-class Weir(Link):
+class Weir(link.Link):
 
     def __init__(self, name=None, shape=None, orif_coef=None, weir_coef=None, invert=None, node1=None, node2=None):
         super(Weir, self).__init__(name, node1, node2, shape)
         self.orif_coef = orif_coef
         self.weir_coef = weir_coef
         self.invert = invert
-        self.report = InputReport(self)
+        self.report = inp.InputReport(self)
 
     def get_flow(self, stage1, stage2):
         """Return the flow of the weir given the stages on both sides of the link."""
@@ -53,26 +55,26 @@ class Weir(Link):
 
     def get_input_strings(self):
         if self.shape:
-            shape_type = property_to_string(self.shape.__class__, '__name__')
-            shape_span = float_to_string(self.shape.span, 3)
-            shape_rise = float_to_string(self.shape.rise, 3)
+            shape_type = rp.property_to_string(self.shape.__class__, '__name__')
+            shape_span = rp.float_to_string(self.shape.span, 3)
+            shape_rise = rp.float_to_string(self.shape.rise, 3)
         else:
             shape_type = 'Undefined'
             shape_span = 'Undefined'
             shape_rise = 'Undefined'
-        inputs = ['Name: ' + property_to_string(self, 'name'),
+        inputs = ['Name: ' + rp.property_to_string(self, 'name'),
                   'Shape Type: ' + shape_type,
                   'Span (in): ' + shape_span,
                   'Rise (in): ' + shape_rise,
-                  'Orifice Coef.: ' + float_to_string(self.orif_coef, 3),
-                  'Weir. Coef: ' + float_to_string(self.weir_coef, 3),
-                  'Invert: ' + float_to_string(self.invert, 3)]
+                  'Orifice Coef.: ' + rp.float_to_string(self.orif_coef, 3),
+                  'Weir. Coef: ' + rp.float_to_string(self.weir_coef, 3),
+                  'Invert: ' + rp.float_to_string(self.invert, 3)]
         return inputs
 
     def set_shape_as_rectangle(self, span, rise, horizontal=False):
-        self.shape = Rectangle(span, rise, horizontal)
+        self.shape = rct.Rectangle(span, rise, horizontal)
         return
 
     def set_shape_as_circle(self, diameter, horizontal=False):
-        self.shape = Circle(diameter, horizontal)
+        self.shape = cir.Circle(diameter, horizontal)
         return

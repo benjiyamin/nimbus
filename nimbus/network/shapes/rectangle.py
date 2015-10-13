@@ -1,9 +1,9 @@
 
-from .shape import Shape
-from .math import inches2feet
+from . import shape as shp
+from . import math as sm
 
 
-class Rectangle(Shape):
+class Rectangle(shp.Shape):
 
     def __init__(self, span, rise, horizontal=False):
         super(Rectangle, self).__init__(horizontal)
@@ -16,7 +16,7 @@ class Rectangle(Shape):
             span = self.span
         else:
             span = self.get_perimeter()
-        flow_area = inches2feet(depth) * inches2feet(span)
+        flow_area = sm.inches2feet(depth) * sm.inches2feet(span)
         return flow_area
 
     def get_wet_perimeter(self, depth):
@@ -28,7 +28,7 @@ class Rectangle(Shape):
                 wet_perimeter = self.span + 2.0 * depth
         else:
             wet_perimeter = self.get_perimeter()
-        converted_perimeter = inches2feet(wet_perimeter)
+        converted_perimeter = sm.inches2feet(wet_perimeter)
         return converted_perimeter
 
     def get_perimeter(self):
@@ -36,7 +36,7 @@ class Rectangle(Shape):
         return perimeter
 
     def get_weir_flow(self, coefficient, depth):
-        converted_head = inches2feet(depth)
-        converted_span = inches2feet(self.span)
+        converted_head = sm.inches2feet(depth)
+        converted_span = sm.inches2feet(self.span)
         flow = coefficient * converted_span * pow(converted_head, 1.5)
         return flow

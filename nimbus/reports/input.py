@@ -1,5 +1,5 @@
 
-from nimbus.reports import Report, show_couples_in_list
+from . import report as rp
 
 
 class InputReport:
@@ -9,7 +9,7 @@ class InputReport:
         self.couple_list = couple_list
 
     def inputs(self, show_title=True):
-        report = Report()
+        report = rp.Report()
         report.add_blank_line()
         if show_title is True:
             report.add_title(self.parent.__class__.__name__)
@@ -17,7 +17,7 @@ class InputReport:
             report.add_string_line(string)
         report.output()
         if self.couple_list:
-            show_couples_in_list(None, self.couple_list.headers, self.couple_list.list)
+            rp.show_couples_in_list(None, self.couple_list.headers, self.couple_list.list)
         else:
             report.add_blank_line()
             report.output()

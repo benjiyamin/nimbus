@@ -1,8 +1,8 @@
 
-from .couplelist import CoupleList
+from . import couple as cpl
 
 
-class PointList(CoupleList):
+class PointList(cpl.CoupleList):
 
     def __init__(self, parent, list_):
         self.parent = parent

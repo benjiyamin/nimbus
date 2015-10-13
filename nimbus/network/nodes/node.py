@@ -1,7 +1,7 @@
 
-from nimbus.hydrology.basin import Basin
-from nimbus.reports.report import property_to_string, float_to_string
-from nimbus.data.objectlist import ObjectList
+from nimbus.hydrology import basin as bsn
+from nimbus.reports import report as rp
+from nimbus.data import object as ob
 
 
 class Node:
@@ -9,11 +9,11 @@ class Node:
     def __init__(self, name=None, start_stage=None):
         self.name = name
         self.start_stage = start_stage
-        self.basins = ObjectList(Basin)
+        self.basins = ob.ObjectList(bsn.Basin)
 
     def get_input_strings(self):
-        inputs = ['Name: ' + property_to_string(self, 'name'),
-                  'Starting Stage (ft): ' + float_to_string(self.start_stage, 3)]
+        inputs = ['Name: ' + rp.property_to_string(self, 'name'),
+                  'Starting Stage (ft): ' + rp.float_to_string(self.start_stage, 3)]
         return inputs
 
     def get_stage(self, storage, time):
@@ -23,3 +23,7 @@ class Node:
     def get_storage(self, elevation):
         storage = 0.0
         return storage
+
+    def get_area(self, elevation):
+        area = 0.0
+        return area

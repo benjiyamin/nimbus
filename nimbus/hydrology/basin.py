@@ -1,5 +1,7 @@
 
-from nimbus.reports import property_to_string, float_to_string, InputReport, ProgressBar
+from nimbus.reports import report as rp
+from nimbus.reports import progress as prg
+from nimbus.reports import input as inp
 
 
 class Basin:
@@ -10,7 +12,7 @@ class Basin:
         self.cn = cn
         self.tc = tc  # minutes
         self.uh = uh
-        self.report = InputReport(self)
+        self.report = inp.InputReport(self)
 
     def get_tabulated_runoff(self, rain_tabulation):
         runoff_tabulation = [(0.0, 0.0, 0.0)]
@@ -51,7 +53,7 @@ class Basin:
         composite_hydrograph = []
         start_message = 'Calculating %s runoff...' % self.name
         end_message = "Success: %s runoff calculations complete!" % self.name
-        progress_bar = ProgressBar(60, start_message, end_message)
+        progress_bar = prg.ProgressBar(60, start_message, end_message)
         progress_bar.begin()
         for i in range(1, composite_length + 1):
             if i < rir_length + 1:
@@ -94,10 +96,10 @@ class Basin:
         return potential_retention
 
     def get_input_strings(self):
-        inputs = ['Name: ' + property_to_string(self, 'name'),
-                  'Area (ac): ' + float_to_string(self.area, 3),
-                  'Curve Number: ' + float_to_string(self.cn, 2),
-                  'Time of Conc (min): ' + float_to_string(self.tc, 2),
-                  'Unit Hydrograph: ' + property_to_string(self.uh, 'name'),
-                  'Peak Factor: ' + property_to_string(self.uh, 'peak_factor')]
+        inputs = ['Name: ' + rp.property_to_string(self, 'name'),
+                  'Area (ac): ' + rp.float_to_string(self.area, 3),
+                  'Curve Number: ' + rp.float_to_string(self.cn, 2),
+                  'Time of Conc (min): ' + rp.float_to_string(self.tc, 2),
+                  'Unit Hydrograph: ' + rp.property_to_string(self.uh, 'name'),
+                  'Peak Factor: ' + rp.property_to_string(self.uh, 'peak_factor')]
         return inputs

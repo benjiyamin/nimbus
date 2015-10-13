@@ -1,5 +1,5 @@
 
-from nimbus.data import data
+from . import data
 
 
 class BaseList:
@@ -14,9 +14,10 @@ class BaseList:
         data.delete_from_list_and_print(index, self.list)
         return
 
-    def get(self, index):
+    def get(self, index, respond=True):
         object_ = self.list[index]
-        print('\nSuccess: %s object assigned to variable.\n' % object_.__class__.__name__)
+        if respond:
+            print('\nSuccess: %s object assigned to variable.\n' % object_.__class__.__name__)
         return object_
 
     def all(self):

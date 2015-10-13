@@ -1,32 +1,32 @@
 
 import os
 
-from nimbus.data import couples_from_csv
-from .distribution import RainfallDistribution
+from nimbus.data import data as dt
+from . import distribution as ds
 
 
 abs_path = os.path.abspath(__file__)
 dir_name = os.path.dirname(abs_path)
 
-delaney = RainfallDistribution("DELANEY", couples_from_csv(dir_name + "/csv/delaney.csv"))
-fdot1 = RainfallDistribution("FDOT-1", couples_from_csv(dir_name + "/csv/fdot1.csv"))
-fdot2 = RainfallDistribution("FDOT-2", couples_from_csv(dir_name + "/csv/fdot2.csv"))
-fdot4 = RainfallDistribution("FDOT-4", couples_from_csv(dir_name + "/csv/fdot4.csv"))
-fdot8 = RainfallDistribution("FDOT-8", couples_from_csv(dir_name + "/csv/fdot8.csv"))
-fdot24 = RainfallDistribution("FDOT-24", couples_from_csv(dir_name + "/csv/fdot24.csv"))
-fdot72 = RainfallDistribution("FDOT-72", couples_from_csv(dir_name + "/csv/fdot72.csv"))
-fdot168 = RainfallDistribution("FDOT-168", couples_from_csv(dir_name + "/csv/fdot168.csv"))
-fdot240 = RainfallDistribution("FDOT-240", couples_from_csv(dir_name + "/csv/fdot240.csv"))
-flmod = RainfallDistribution("FLMOD", couples_from_csv(dir_name + "/csv/flmod.csv"))
-nrcsi24 = RainfallDistribution("SCSI-24", couples_from_csv(dir_name + "/csv/nrcsi24.csv"))
-nrcsi48 = RainfallDistribution("SCSI-48", couples_from_csv(dir_name + "/csv/nrcsi48.csv"))
-nrcsa24 = RainfallDistribution("SCSIA-24", couples_from_csv(dir_name + "/csv/nrcsia24.csv"))
-nrcsii24 = RainfallDistribution("SCSII-24", couples_from_csv(dir_name + "/csv/nrcsii24.csv"))
-nrcsii48 = RainfallDistribution("SCSII-48", couples_from_csv(dir_name + "/csv/nrcsii48.csv"))
-nrcsiii = RainfallDistribution("SCSIII", couples_from_csv(dir_name + "/csv/nrcsiii.csv"))
-orange = RainfallDistribution("ORANGE", couples_from_csv(dir_name + "/csv/orange.csv"))
-sfwmd72 = RainfallDistribution("SFWMD72", couples_from_csv(dir_name + "/csv/sfwmd72.csv"))
-sjrwmd96 = RainfallDistribution("SJRWMD96", couples_from_csv(dir_name + "/csv/sjrwmd96.csv"))
+delaney = ds.RainfallDistribution("DELANEY", dt.couples_from_csv(dir_name + "/csv/delaney.csv"))
+fdot1 = ds.RainfallDistribution("FDOT-1", dt.couples_from_csv(dir_name + "/csv/fdot1.csv"))
+fdot2 = ds.RainfallDistribution("FDOT-2", dt.couples_from_csv(dir_name + "/csv/fdot2.csv"))
+fdot4 = ds.RainfallDistribution("FDOT-4", dt.couples_from_csv(dir_name + "/csv/fdot4.csv"))
+fdot8 = ds.RainfallDistribution("FDOT-8", dt.couples_from_csv(dir_name + "/csv/fdot8.csv"))
+fdot24 = ds.RainfallDistribution("FDOT-24", dt.couples_from_csv(dir_name + "/csv/fdot24.csv"))
+fdot72 = ds.RainfallDistribution("FDOT-72", dt.couples_from_csv(dir_name + "/csv/fdot72.csv"))
+fdot168 = ds.RainfallDistribution("FDOT-168", dt.couples_from_csv(dir_name + "/csv/fdot168.csv"))
+fdot240 = ds.RainfallDistribution("FDOT-240", dt.couples_from_csv(dir_name + "/csv/fdot240.csv"))
+flmod = ds.RainfallDistribution("FLMOD", dt.couples_from_csv(dir_name + "/csv/flmod.csv"))
+nrcsi24 = ds.RainfallDistribution("SCSI-24", dt.couples_from_csv(dir_name + "/csv/nrcsi24.csv"))
+nrcsi48 = ds.RainfallDistribution("SCSI-48", dt.couples_from_csv(dir_name + "/csv/nrcsi48.csv"))
+nrcsa24 = ds.RainfallDistribution("SCSIA-24", dt.couples_from_csv(dir_name + "/csv/nrcsia24.csv"))
+nrcsii24 = ds.RainfallDistribution("SCSII-24", dt.couples_from_csv(dir_name + "/csv/nrcsii24.csv"))
+nrcsii48 = ds.RainfallDistribution("SCSII-48", dt.couples_from_csv(dir_name + "/csv/nrcsii48.csv"))
+nrcsiii = ds.RainfallDistribution("SCSIII", dt.couples_from_csv(dir_name + "/csv/nrcsiii.csv"))
+orange = ds.RainfallDistribution("ORANGE", dt.couples_from_csv(dir_name + "/csv/orange.csv"))
+sfwmd72 = ds.RainfallDistribution("SFWMD72", dt.couples_from_csv(dir_name + "/csv/sfwmd72.csv"))
+sjrwmd96 = ds.RainfallDistribution("SJRWMD96", dt.couples_from_csv(dir_name + "/csv/sjrwmd96.csv"))
 
 defaults_list = [
     delaney,

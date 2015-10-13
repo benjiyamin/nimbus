@@ -1,9 +1,10 @@
 
 import math
 
-from nimbus.math.math import interpolate_from_table
-from nimbus.data.couplelist import CoupleList
-from nimbus.reports import float_to_string, property_to_string, InputReport
+from nimbus.math import math as nm
+from nimbus.data import couple as cpl
+from nimbus.reports import report as rp
+from nimbus.reports import input as inp
 
 
 class UnitHydrograph:
@@ -11,8 +12,8 @@ class UnitHydrograph:
     def __init__(self, name=None, peak_factor=None, runoff_ratios=None):
         self.name = name
         self.peak_factor = peak_factor
-        self.runoff_ratios = CoupleList('Time-Runoff Ratios', ('Time', 'Runoff'), runoff_ratios)
-        self.report = InputReport(self, self.runoff_ratios)
+        self.runoff_ratios = cpl.CoupleList('Time-Runoff Ratios', ('Time', 'Runoff'), runoff_ratios)
+        self.report = inp.InputReport(self, self.runoff_ratios)
 
     def get_flood_hydrograph(self, area, tc, time_step=None):
         delta = 0.133 * tc / 60.0  # hours
@@ -44,10 +45,10 @@ class UnitHydrograph:
 
     def get_runoff_ratio(self, time, peak_time):
         uh_couples = self.runoff_ratios.list
-        runoff_ratio = interpolate_from_table(time / peak_time, uh_couples, 0, 1)
+        runoff_ratio = nm.interpolate_from_table(time / peak_time, uh_couples, 0, 1)
         return runoff_ratio
 
     def get_input_strings(self):
-        inputs = ['Name: ' + property_to_string(self, 'name'),
-                  'Peak Factor: ' + float_to_string(self.peak_factor, 3)]
+        inputs = ['Name: ' + rp.property_to_string(self, 'name'),
+                  'Peak Factor: ' + rp.float_to_string(self.peak_factor, 3)]
         return inputs
