@@ -1,5 +1,5 @@
 
-from . import shape as shp
+from . import section as shp
 from . import math as sm
 
 

@@ -8,7 +8,7 @@ class PointList(cpl.CoupleList):
         self.parent = parent
         super(PointList, self).__init__('Points', ('X (in)', 'Y (in)'), list_)
 
-    def create(self, value1, value2, order=False):
+    def create(self, value1, value2, order=False, respond=False):
         """Create a new point and add it to the list."""
         super(PointList, self).create(value1, value2, order)
         self.parent.set_span_and_rise()

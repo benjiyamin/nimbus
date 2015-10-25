@@ -1,18 +1,17 @@
-
 import math
 
 from . import link, weir
 from nimbus.reports import report as rp
 from nimbus.reports import input as inp
-from nimbus.network.shapes import circle as cir
-from nimbus.network.shapes import rectangle as rct
+from nimbus.network.links.sections import circle as cir
+from nimbus.network.links.sections import rectangle as rct
 
 
 class Pipe(link.Link):
 
-    def __init__(self, name=None, shape=None, mannings=None,
+    def __init__(self, name=None, section=None, mannings=None,
                  length=None, invert1=None, invert2=None, node1=None, node2=None):
-        super(Pipe, self).__init__(name, node1, node2, shape)
+        super(Pipe, self).__init__(name, node1, node2, section)
         self.mannings = mannings
         self.length = length  # feet
         self.invert1 = invert1  # feet
@@ -21,7 +20,7 @@ class Pipe(link.Link):
 
     def get_wet_perimeter(self, depth):
         """Return the wet perimeter in LF at a given depth from the invert of the pipe."""
-        wet_perimeter = self.shape.get_wet_perimeter(depth)
+        wet_perimeter = self.section.get_wet_perimeter(depth)
         return wet_perimeter
 
     def get_hyd_radius(self, depth):
@@ -38,19 +37,21 @@ class Pipe(link.Link):
         """Return the depth given a stage and invert."""
         if stage < invert:
             depth = 0.0
-        elif stage > invert + self.shape.rise / 12.0:
-            depth = self.shape.rise
+        elif stage > invert + self.section.rise / 12.0:
+            depth = self.section.rise
         else:
             depth = (stage - invert) * 12.0
         return depth
 
-    def get_flow(self, stage1, stage2):
+    def get_flow(self, stage1, stage2=None):
+        if not stage2:
+            stage2 = stage1 - self.invert1 + self.invert2
         if stage1 > stage2:                                                             # stage 1 higher
             if self.invert1 > self.invert2:                                             # pipe declined
-                crown1 = self.invert1 + self.shape.rise / 12.0
+                crown1 = self.invert1 + self.section.rise / 12.0
                 if stage1 > crown1:                                                     # full flow
                     depth = self.get_depth(stage1, self.invert1)
-                    center2 = self.invert2 + self.shape.rise / 12.0 / 2.0
+                    center2 = self.invert2 + self.section.rise / 12.0 / 2.0
                     hg2 = max(stage2, center2)
                     velocity = self.get_velocity(stage1, hg2, depth)
                 else:                                                                   # partial flow
@@ -61,15 +62,15 @@ class Pipe(link.Link):
                 area = self.get_flow_area(depth)
                 flow = velocity * area
             else:                                                                       # pipe inclined
-                weir_flow = weir.Weir(shape=self.shape, orif_coef=1.0,
+                weir_flow = weir.Weir(section=self.section, orif_coef=1.0,
                                       weir_coef=2.63, invert=self.invert2)
                 flow = weir_flow.get_flow(stage1, stage2)
         elif stage2 > stage1:                                                           # stage 2 higher
             if self.invert2 > self.invert1:                                             # pipe declined
-                crown2 = self.invert2 + self.shape.rise / 12.0
+                crown2 = self.invert2 + self.section.rise / 12.0
                 if stage2 > crown2:                                                     # full flow
                     depth = self.get_depth(stage2, self.invert2)
-                    center1 = self.invert1 + self.shape.rise / 12.0 / 2.0
+                    center1 = self.invert1 + self.section.rise / 12.0 / 2.0
                     hg1 = max(stage1, center1)
                     velocity = self.get_velocity(stage2, hg1, depth)
                 else:                                                                   # partial flow
@@ -80,7 +81,7 @@ class Pipe(link.Link):
                 area = self.get_flow_area(depth)
                 flow = velocity * area
             else:                                                                       # pipe inclined
-                weir_flow = weir.Weir(shape=self.shape, orif_coef=1.0,
+                weir_flow = weir.Weir(section=self.section, orif_coef=1.0,
                                       weir_coef=2.63, invert=self.invert1)
                 flow = -weir_flow.get_flow(stage2, stage1)
         else:
@@ -111,10 +112,10 @@ class Pipe(link.Link):
     '''
 
     def get_input_strings(self):
-        if self.shape:
-            shape_type = rp.property_to_string(self.shape.__class__, '__name__')
-            shape_span = rp.float_to_string(self.shape.span, 3)
-            shape_rise = rp.float_to_string(self.shape.rise, 3)
+        if self.section:
+            shape_type = rp.property_to_string(self.section.__class__, '__name__')
+            shape_span = rp.float_to_string(self.section.span, 3)
+            shape_rise = rp.float_to_string(self.section.rise, 3)
         else:
             shape_type = shape_span = shape_rise = 'Undefined'
         inputs = ['Name: ' + rp.property_to_string(self, 'name'),
@@ -130,11 +131,11 @@ class Pipe(link.Link):
         return inputs
 
     def set_shape_as_rectangle(self, span, rise, horizontal=False):
-        self.shape = rct.Rectangle(span, rise, horizontal)
+        self.section = rct.Rectangle(span, rise, horizontal)
         return
 
     def set_shape_as_circle(self, diameter, horizontal=False):
-        self.shape = cir.Circle(diameter, horizontal)
+        self.section = cir.Circle(diameter, horizontal)
         return
 
     '''

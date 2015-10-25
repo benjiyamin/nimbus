@@ -5,9 +5,9 @@ from nimbus.reports import input as inp
 
 class Channel(link.Link):
 
-    def __init__(self, name=None, shape=None, mannings=None,
+    def __init__(self, name=None, section=None, mannings=None,
                  length=None, invert1=None, invert2=None, node1=None, node2=None):
-        super(Channel, self).__init__(name, node1, node2, shape)
+        super(Channel, self).__init__(name, node1, node2, section)
         self.mannings = mannings
         self.length = length  # feet
         self.invert1 = invert1  # feet

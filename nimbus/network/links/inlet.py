@@ -6,9 +6,9 @@ from nimbus.data import object as ob
 
 class Inlet(pipe.Pipe):
 
-    def __init__(self, name=None, shape=None, mannings=None,
+    def __init__(self, name=None, section=None, mannings=None,
                  length=None, invert1=None, invert2=None, node1=None, node2=None):
-        super(Inlet, self).__init__(name, shape, mannings, length, invert1, invert2, node1, node2)
+        super(Inlet, self).__init__(name, section, mannings, length, invert1, invert2, node1, node2)
         self.weirs = ob.ObjectList(weir.Weir)
         self.report = inp.InputReport(self)
 

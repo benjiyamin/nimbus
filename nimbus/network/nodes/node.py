@@ -1,5 +1,4 @@
-
-from nimbus.hydrology import basin as bsn
+from nimbus.network.nodes.basin import basin as bsn
 from nimbus.reports import report as rp
 from nimbus.data import object as ob
 

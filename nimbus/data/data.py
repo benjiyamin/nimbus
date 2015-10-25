@@ -28,13 +28,14 @@ def append_to_list_and_print(object_, list_):
     return
 
 
-def couples_from_csv(filename):
+def tuples_from_csv(filename):
     open_file = open(filename, "rt")
     reader = csv.reader(open_file, delimiter=',')
     tuple_list = []
     for row in reader:
-        i = float(row[0])
-        j = float(row[1])
-        tuple_list.append((i, j))
+        tuple_ = tuple([float(column) for column in row])
+        #i = float(row[0])
+        #j = float(row[1])
+        tuple_list.append(tuple_)
     open_file.close()
     return tuple_list

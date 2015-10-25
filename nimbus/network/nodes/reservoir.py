@@ -27,7 +27,6 @@ class Reservoir(node.Node):
         return area
 
     def get_storage(self, elevation):
-        #start_time = ti.time()
         if self.contours.length() > 1:
             contour_list = self.contours.all()
             min_elevation = min([contour[0] for contour in contour_list])
@@ -50,11 +49,9 @@ class Reservoir(node.Node):
                 storage += ((prev_area + area) / 2.0) * (elevation - prev_elevation)
         else:
             storage = 0.0
-        #print("\nTotal Calculation time: {:.4f} seconds.\n".format(ti.time() - start_time))
         return storage
 
     def get_stage(self, storage, time=None, tolerance=0.0001):
-        #start_time = ti.time()
         if self.contours.length() > 1:
             contour_list = self.contours.all()
             bound1 = contour_list[0][0]
@@ -63,47 +60,13 @@ class Reservoir(node.Node):
             stage = nm.goal_seek(self.get_storage, bound1, bound2, storage, max_iterations, tolerance)
         else:
             stage = self.start_stage
-        #print("\nTotal Calculation time: {:.4f} seconds.\n".format(ti.time() - start_time))
         return stage
 
-    '''
-    def get_stage(self, storage, time=None):
-        #start_time = ti.time()
-        if self.contours.length() > 1:
-            store = self.get_stage_storage_equivalent()
-            stage = store.get_stage(storage)
-        else:
-            stage = self.start_stage
-        #print("\nTotal Calculation time: {:.4f} seconds.\n".format(ti.time() - start_time))
-        return stage
-
-    def get_storage(self, elevation):
-        #start_time = ti.time()
-        if self.contours.length() > 1:
-            store = self.get_stage_storage_equivalent()
-            stage = store.get_storage(elevation)
-        else:
-            stage = self.start_stage
-        #print("\nTotal Calculation time: {:.4f} seconds.\n".format(ti.time() - start_time))
-        return stage
-
-    def get_stage_storage_equivalent(self):
-        if self.contours.length() > 1:
-            store = sto.Storage()
-            volume = 0.0
-            contour_list = self.contours.all()
-            for i, contour in self.contours.enumerate():
-                if i > 0:
-                    prev_elevation = contour_list[i - 1][0]
-                    prev_area = contour_list[i - 1][1]
-                    elevation = contour[0]
-                    area = contour[1]
-                    volume += ((prev_area + area) / 2.0) * (elevation - prev_elevation)
-                store.stage_volumes.list.append((contour[0], volume))
-            return store
-        else:
-            return None
-        '''
+    def get_outgoing_links(self, network):
+        links = []
+        for link in network.links.all():
+            links.append(link)
+        return
 
     def run_drawdown_analysis_and_get_time(self, network, start_stage, goal_stage, interval=0.01, max_time=1000.0):
         sim_network = network

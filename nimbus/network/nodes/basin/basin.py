@@ -2,17 +2,34 @@
 from nimbus.reports import report as rp
 from nimbus.reports import progress as prg
 from nimbus.reports import input as inp
+from nimbus.data import object as ob
+from nimbus.network.nodes.basin.shape import Shape
 
 
 class Basin:
 
     def __init__(self, name=None, area=None, cn=None, tc=None, uh=None):
         self.name = name
-        self.area = area  # acres
-        self.cn = cn
         self.tc = tc  # minutes
         self.uh = uh
+        self.shapes = ob.ObjectList(Shape)
         self.report = inp.InputReport(self)
+
+    def get_weighted_cn(self):
+        sum_a = sum([shape.area * shape.cn for shape in self.shapes])
+        sum_b = sum([shape.area for shape in self.shapes])
+        weighted_cn = sum_a / sum_b
+        return weighted_cn
+
+    def get_weighted_c(self):
+        sum_a = sum([shape.area * shape.c for shape in self.shapes])
+        sum_b = sum([shape.area for shape in self.shapes])
+        weighted_c = sum_a / sum_b
+        return weighted_c
+
+    def get_total_area(self):
+        area = sum([shape.area * shape.c for shape in self.shapes])
+        return area
 
     def get_tabulated_runoff(self, rain_tabulation):
         runoff_tabulation = [(0.0, 0.0, 0.0)]
@@ -37,11 +54,13 @@ class Basin:
 
     def get_runoff_volume(self, rainfall):
         runoff = self.get_runoff(rainfall)  # Inches
-        runoff_volume = runoff * self.area * 43560.0 / 12.0
+        area = self.get_total_area()
+        runoff_volume = runoff * area * 43560.0 / 12.0
         return runoff_volume  # Cubic Feet
 
     def get_composite_hydrograph(self, rain_tabulation, time_step):
-        flood_hydrograph = self.uh.get_flood_hydrograph(self.area, self.tc, time_step)
+        area = self.get_total_area()
+        flood_hydrograph = self.uh.get_flood_hydrograph(area, self.tc, time_step)
         reverse_incremental_runoff = self.get_reverse_incremental_runoff(rain_tabulation)
         if len(flood_hydrograph) < len(reverse_incremental_runoff):
             for i in range(len(flood_hydrograph), len(reverse_incremental_runoff)):
@@ -92,13 +111,16 @@ class Basin:
         return initial_abstraction
 
     def get_potential_retention(self):
-        potential_retention = 1000.0 / self.cn - 10.0
+        cn = self.get_weighted_cn()
+        potential_retention = 1000.0 / cn - 10.0
         return potential_retention
 
     def get_input_strings(self):
+        area = self.get_total_area()
+        cn = self.get_weighted_cn()
         inputs = ['Name: ' + rp.property_to_string(self, 'name'),
-                  'Area (ac): ' + rp.float_to_string(self.area, 3),
-                  'Curve Number: ' + rp.float_to_string(self.cn, 2),
+                  'Area (ac): ' + rp.float_to_string(area, 3),
+                  'Curve Number: ' + rp.float_to_string(cn, 2),
                   'Time of Conc (min): ' + rp.float_to_string(self.tc, 2),
                   'Unit Hydrograph: ' + rp.property_to_string(self.uh, 'name'),
                   'Peak Factor: ' + rp.property_to_string(self.uh, 'peak_factor')]
