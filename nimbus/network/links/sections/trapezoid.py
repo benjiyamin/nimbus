@@ -1,9 +1,9 @@
 
-from . import section as shp
+from .section import Section
 from . import math as sm
 
 
-class Trapezoid(shp.Shape):
+class Trapezoid(Section):
 
     def __init__(self, span, rise, left_slope, right_slope, horizontal=False):
         super(Trapezoid, self).__init__(horizontal)
@@ -57,3 +57,6 @@ class Trapezoid(shp.Shape):
         flow3 = coefficient * head2 * self.right_slope * (pow(head2, 2.5) - (pow(head1, 2.5))) / 2.5 / (head2 - head1)
         flow = flow1 + flow2 + flow3
         return flow
+
+    def get_rise(self):
+        return self.rise

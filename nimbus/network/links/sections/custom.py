@@ -6,7 +6,7 @@ from . import math as sm
 from nimbus.data import point as pt
 
 
-class Custom(shp.Shape):
+class Custom(shp.Section):
 
     def __init__(self, points=None, horizontal=False):
         super(Custom, self).__init__(horizontal)

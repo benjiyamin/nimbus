@@ -1,14 +1,14 @@
 
-from . import section as shp
+from .section import Section
 from . import math as sm
 
 
-class Rectangle(shp.Shape):
+class Rectangle(Section):
 
     def __init__(self, span, rise, horizontal=False):
         super(Rectangle, self).__init__(horizontal)
-        self.span = span  # inches
-        self.rise = rise  # inches
+        self.span = span
+        self.rise = rise
 
     def get_flow_area(self, depth):
         """Return the flow area in SF at a given depth from the invert of the shape."""
@@ -40,3 +40,6 @@ class Rectangle(shp.Shape):
         converted_span = sm.inches2feet(self.span)
         flow = coefficient * converted_span * pow(converted_head, 1.5)
         return flow
+
+    def get_rise(self):
+        return self.rise

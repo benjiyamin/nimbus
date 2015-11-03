@@ -12,7 +12,7 @@ class Inlet(pipe.Pipe):
         self.weirs = ob.ObjectList(weir.Weir)
         self.report = inp.InputReport(self)
 
-    def get_flow(self, stage1, stage2):
+    def get_flow(self, stage1, stage2=None):
         pipe_flow = super(Inlet, self).get_flow(stage1, stage2)
         weir_flow = sum([w.get_flow(stage1, stage2) for w in self.weirs.list])
         if weir_flow > 0.0 and pipe_flow > 0.0:

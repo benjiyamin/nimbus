@@ -1,13 +1,13 @@
 import math
 
-from . import link
+from .link import Link
 from nimbus.reports import report as rp
 from nimbus.reports import input as inp
 from nimbus.network.links.sections import circle as cir
 from nimbus.network.links.sections import rectangle as rct
 
 
-class Weir(link.Link):
+class Weir(Link):
 
     def __init__(self, name=None, section=None, orif_coef=None, weir_coef=None, invert=None, node1=None, node2=None):
         super(Weir, self).__init__(name, node1, node2, section)

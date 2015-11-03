@@ -19,3 +19,6 @@ class Link:
         else:
             flow_area = 0.0
         return flow_area
+
+    def get_travel_time(self):
+        pass

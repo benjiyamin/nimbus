@@ -1,17 +1,15 @@
 
 import math
 
-from . import section as shp
+from .section import Section
 from . import math as sm
 
 
-class Circle(shp.Shape):
+class Circle(Section):
 
     def __init__(self, diameter, horizontal=False):
         super(Circle, self).__init__(horizontal)
         self.diameter = diameter  # inches
-        self.span = diameter      # inches
-        self.rise = diameter      # inches
 
     def get_flow_area(self, depth):
         """Return the flow area in SF at a given depth from the invert of the shape."""
@@ -36,3 +34,6 @@ class Circle(shp.Shape):
     def get_perimeter(self):
         perimeter = 2.0 * math.pi * self.diameter / 2.0
         return perimeter
+
+    def get_rise(self):
+        return self.diameter
