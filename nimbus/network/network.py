@@ -5,9 +5,10 @@ from nimbus.reports import report as rp
 
 class Network:
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, intensity_curve=None):
         """Create a network. This is where nodes and links are organized for simulation."""
         self.name = name
+        self.intensity_curve = intensity_curve
         self.nodes = node.NodeList()
         self.links = link.LinkList()
 

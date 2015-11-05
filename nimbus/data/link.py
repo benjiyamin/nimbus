@@ -12,79 +12,59 @@ class LinkList(ob.ObjectList):
 
     def __init__(self, list_=None):
         super(LinkList, self).__init__(Link, list_, True)
-        self.pipes = []
-        self.weirs = []
-        self.inlets = []
-        self.gutters = []
-        self.channels = []
 
     def create_pipe(self, *args, **kwargs):
         """Create a pipe and add it to the link list."""
         self.create(Pipe, *args, **kwargs)
-        self.pipes.append(self.list[-1])
         return
 
     def create_weir(self, *args, **kwargs):
         """Create a weir and add it to the link list."""
         self.create(Weir, *args, **kwargs)
-        self.weirs.append(self.list[-1])
         return
 
     def create_inlet(self, *args, **kwargs):
         """Create an inlet and add it to the link list."""
         self.create(Inlet, *args, **kwargs)
-        self.inlets.append(self.list[-1])
         return
 
     def create_gutter(self, *args, **kwargs):
         """Create a gutter and add it to the link list."""
         self.create(Gutter, *args, **kwargs)
-        self.gutters.append(self.list[-1])
         return
 
     def create_channel(self, *args, **kwargs):
         """Create a channel and add it to the link list."""
         self.create(Channel, *args, **kwargs)
-        self.channels.append(self.list[-1])
         return
 
-    def delete_pipe(self, index):
-        """Remove the object at the specified index from the list and delete it."""
-        object_ = self.pipes[index]
-        self.pipes.remove(object_)
-        list_index = self.list.index(object_)
-        self.delete(list_index)
-        return
-    
-    def delete_weir(self, index):
-        """Remove the object at the specified index from the list and delete it."""
-        object_ = self.weirs[index]
-        self.weirs.remove(object_)
-        list_index = self.list.index(object_)
-        self.delete(list_index)
-        return
-    
-    def delete_inlet(self, index):
-        """Remove the object at the specified index from the list and delete it."""
-        object_ = self.inlets[index]
-        self.inlets.remove(object_)
-        list_index = self.list.index(object_)
-        self.delete(list_index)
-        return
-    
-    def delete_gutter(self, index):
-        """Remove the object at the specified index from the list and delete it."""
-        object_ = self.gutters[index]
-        self.gutters.remove(object_)
-        list_index = self.list.index(object_)
-        self.delete(list_index)
-        return
-    
-    def delete_channel(self, index):
-        """Remove the object at the specified index from the list and delete it."""
-        object_ = self.channels[index]
-        self.channels.remove(object_)
-        list_index = self.list.index(object_)
-        self.delete(list_index)
-        return
+    def all_channels(self):
+        channels = self.get_all_from_class(Channel)
+        return channels
 
+    def all_inlets(self):
+        inlets = self.get_all_from_class(Inlet)
+        return inlets
+
+    def all_gutters(self):
+        gutters = self.get_all_from_class(Gutter)
+        return gutters
+
+    def get_all_from_class(self, class_):
+        all_objects = [link for link in self.list if link.__class__ is class_]
+        return all_objects
+
+    def get_channel(self, index):
+        all_channels = self.all_channels()
+        channel = all_channels[index]
+        return channel
+
+    def get_inlet(self, index):
+        all_inlets = self.all_inlets()
+        inlet = all_inlets[index]
+        return inlet
+
+    def get_gutter(self, index):
+        all_gutters = self.all_gutters()
+        gutter = all_gutters[index]
+        return gutter
